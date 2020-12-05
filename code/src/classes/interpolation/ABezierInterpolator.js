@@ -63,14 +63,45 @@ export default class ABezierInterpolator extends AKeyframeInterpolation {
     //##################//--You should implement the functions below--\\##################
     //<editor-fold desc="You should implement the functions below">
 
+    /**
+     * Get the value of the spline for specified alpha parameter.
+     * @param alpha -- the parameter indicating progress along the spline
+     * @param p0 -- first control point (scalar)
+     * @param p1 -- second control point (scalar)
+     * @param p2 -- third control point (scalar)
+     * @param p3 -- fourse control point (scalar)
+     * @constructor
+     */
     static GetSplineValueForAlpha(alpha, p0, p1, p2, p3){
         // Your code here
     }
 
+    /**
+     * Given the four control points of a 2D spline (as arrays with two scalars) return the y coordinate of the spline at the provided x coordinate.
+     * In this case, the second and third control points are limited to being in between the first and last control points.
+     * This will ensure that the solution is unique. You will want to use the `GetSplineAlphaForValue` function below in your code here.
+     * @param x the x coordinate
+     * @param xy0 -- first control point ([x, y])
+     * @param xy1 -- second control point ([x, y])
+     * @param xy2 -- third control point ([x, y])
+     * @param xy3 -- fourth control point ([x, y])
+     * @constructor
+     */
     static GetSplineYAtX(x, xy0,xy1,xy2,xy3){
         // Your code here
     }
 
+    /**
+     * Gets the alpha that maps to a specified value in a 1D spline.
+     * Any alpha value within 0.001 of the exact answer will receive full credit.
+     * HINT: One of the simplest ways to do this uses binary search.
+     * @param value
+     * @param p0
+     * @param p1
+     * @param p2
+     * @param p3
+     * @constructor
+     */
     static GetSplineAlphaForValue(value, p0,p1,p2,p3){
         // Your code here
     }
