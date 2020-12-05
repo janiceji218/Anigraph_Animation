@@ -40,3 +40,6 @@ If you have completed the code in `ABezierInterpolator` correctly, then you shou
 - Loop Time: Displays the time at which the animation will loop. You can click and drag the number or change it, or double click it and type in the duration you want.
 - Play / Pause / Stop: The usual meaning...
 - Timeline Zoom: Change the zoom of the timelines. Side Note: Currently, if you run into any display issues with the tween window, try adjusting this to see if it fixed things before resorting to anything more drastic.
+
+#### Tween Editor:
+![image](imgs/TweenView.jpg)
