@@ -1,5 +1,8 @@
 # Assignment7
 
+
+ 
+
 The core part of Assignment 7 will consist of 2 parts:
 1. First, you will implement Bezier Spline interpolation for keyframed properties in AniGraph
     - This will not require much code, but will require you to work through what it means to apply spline interpolation to different properties using 2D time-value controls.
@@ -9,3 +12,17 @@ The core part of Assignment 7 will consist of 2 parts:
 
 If you are looking at this repo on Friday: we will replace this with more specific instructions tomorrow and release a video demo for the assignment.
 In the meantime, we are releasing the system for you to try out. Animation should be functional, but before you complete your Bezier spline code it will perform linear interpolation.
+
+
+
+## Animation GUI:
+![image](imgs/InterfaceLettered.jpg)
+- A: Shape editor tab. This tab will bring you to the shape editor window from assignments 1 & 2.
+- B: Custom controls tab. This will bring you to a tab with controls for custom view classes that will show in the Live View tab. There is also a dropdown menu that you can use to switch the view class of the selected object here. 
+- C: Live View Tab. This will change the right window to live view, where you can see custom view classes, similar to assignments 1 & 2.
+- D: Graph Editor Tab. This will change the right window to the graph editor from assignment 2.
+- E: Tween Editor Tab. This will change the right window to the Tween Editor, shown in this image, which lets you adjust the interpolation between different keyframes
+- F: Selected Keyframe Track Dropdown. This will select which property of the selected object to edit interpolation for in the Tween Tab Window.
+- G: Playback controls and Current Keyframe-able tracks
+- H: Timeline, with keyframe tracks, playhead, and tween regions
+- I: Scroll Scale Window. Shows the portion of time that is displayed in the timeline. You can use the slider to the left to change the scale, which will adjust the size of t he blue region in the window. You can also click and drag the blue region to change which part of the composition you are zoomed in on.
