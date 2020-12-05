@@ -63,6 +63,25 @@ export default class ABezierInterpolator extends AKeyframeInterpolation {
     //##################//--You should implement the functions below--\\##################
     //<editor-fold desc="You should implement the functions below">
 
+    // [NOTE: the parameter of a spline is ofter referred to as t. However, we are calling it alpha here so as not to confuse it
+    // with time, which will in fact be the x dimension of our 2D interpolation splines.]
+
+    // Below you will find three functions for you to implement.
+    // AniGraph can keyframe any property that is either a scalar or a Vector (the parent class of Vec2, Vec3, and Point2D / P2D())
+    // The basic process for interpolating all of these is the same: each dimension of the property is represented as a 2D Bezier spline
+    // where the 2D coordinates represent (time, value). Therefore, scalars are represented as a single 2D spline, while Vec2's are
+    // represented as 2 2D splines (one for x, and one for y). The functions below will be called on EACH dimension of whatever property
+    // is being interpolated. So, from the perspecting of these functions, you can think of always interpolating a scalar value over time.
+
+    // Recall that we can think of 2D splines as consisting of 1D splines for each coordinate that happen to share their alpha parameter.
+    // In this case, we want to figure out the value corresponding to a particular time. To do this, we can first solve for the alpha parameter
+    // corresponding to a particular time, and then use that alpha to figure out what the corresponding value is. We've split this task up into
+    // the three functions below.
+
+    // You can switch between spline and linear interpolation by changing the commented line of getValueAtTime above. When using Spline interpolation,
+    // you can check your results in the app by looking at the current value indicator in the tween editor to see if it follows the rendered splines.
+    // Of course, you should be sure to edit the rendered splines when checking this.
+
     /**
      * Get the value of the spline for specified alpha parameter.
      * @param alpha -- the parameter indicating progress along the spline
