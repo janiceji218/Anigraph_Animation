@@ -26,3 +26,10 @@ In the meantime, we are releasing the system for you to try out. Animation shoul
 - G: Playback controls and Current Keyframe-able tracks
 - H: Timeline, with keyframe tracks, playhead, and tween regions
 - I: Scroll Scale Window. Shows the portion of time that is displayed in the timeline. You can use the slider to the left to change the scale, which will adjust the size of t he blue region in the window. You can also click and drag the blue region to change which part of the composition you are zoomed in on.
+
+#### Animation Controls
+![image](imgs/PlayControls.jpg)
+- Current Time: Displays current time of playhead in seconds.
+- Loop Time: Displays the time at which the animation will loop. You can click and drag the number or change it, or double click it and type in the duration you want.
+- Play / Pause / Stop: The usual meaning...
+- Timeline Zoom: Change the zoom of the timelines. Side Note: Currently, if you run into any display issues with the tween window, try adjusting this to see if it fixed things before resorting to anything more drastic.
