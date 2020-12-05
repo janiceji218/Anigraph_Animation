@@ -30,10 +30,6 @@ Testing Spline Interpolation:
 - I: Scroll Scale Window. Shows the portion of time that is displayed in the timeline. You can use the slider to the left to change the scale, which will adjust the size of t he blue region in the window. You can also click and drag the blue region to change which part of the composition you are zoomed in on.
 - J: Tween Editor View: For each dimension of the property you are interpolating, there is a curve connecting keyframe values shown in this window. You can click and drag on handles to edit splines connecting keyframes. The vertical line in the window indicates the current time, and for each curve there is a larger colored dot representing the current value of the property.   
 
-### Note for checking your work on spline interpolation:
-The starter code lets you move the control points of splines in the Tween View. However, property values will be interpolated linearly until you have completed the first part of the assignment. This provides a visual way for you to check your results.
-If you have completed the code in `ABezierInterpolator` correctly, then you should see the current value indicators move along the displayed splines over time.
-
 #### Animation Controls
 ![image](imgs/PlayControls.jpg)
 - Current Time: Displays current time of playhead in seconds.
@@ -43,3 +39,7 @@ If you have completed the code in `ABezierInterpolator` correctly, then you shou
 
 #### Tween Editor:
 ![image](imgs/TweenView.jpg)
+
+### Note for checking your work on spline interpolation:
+The starter code lets you move the control points of splines in the Tween View. However, property values will be interpolated linearly until you have completed the first part of the assignment. This provides a visual way for you to check your results.
+If you have completed the code in `ABezierInterpolator` correctly, then you should see the current value indicators move along the displayed splines over time.
