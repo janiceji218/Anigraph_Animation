@@ -57,6 +57,7 @@ export default class ATweenComponent extends ASupplementalGraphicsComponent2D{
 
     onSelectedKeyframeTrackChanged(selectedKeyframeTrackName){
         this.setState({selectedKeyframeTrackName: selectedKeyframeTrackName});
+        this.getSelectedModel().notifyAnimationTrackChanged();
         this._hardUpdate();
     }
 
