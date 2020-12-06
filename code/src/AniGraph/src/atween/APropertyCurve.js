@@ -333,8 +333,10 @@ export default class APropertyCurve extends AObject{
             k.show();
         }
         // this.keyframeElements[0].startHandle.hide();
-        this.keyframeElements[this.keyframeElements.length-1].startHandle.hide();
-        this.keyframeElements[this.keyframeElements.length-1].endHandle.hide();
+        if(this.keyframeElements.length) {
+            this.keyframeElements[this.keyframeElements.length - 1].startHandle.hide();
+            this.keyframeElements[this.keyframeElements.length - 1].endHandle.hide();
+        }
     }
 
     getCurrentPropertyValue(){
@@ -424,7 +426,8 @@ export default class APropertyCurve extends AObject{
         var dimid;
         var dimrange;
         dimid = (this.allDimensionsRange[1]+this.allDimensionsRange[0])*0.5;
-        dimrange = (this.allDimensionsRange[1]-this.allDimensionsRange[0]);
+        // dimrange = (this.allDimensionsRange[1]-this.allDimensionsRange[0]);
+        dimrange = Math.max(this.allDimensionsRange[1]-this.allDimensionsRange[0],1);
         return ((y-canvasMid)*(dimrange/canvasRange))+dimid;
     }
 
@@ -450,7 +453,7 @@ export default class APropertyCurve extends AObject{
         var dimid;
         var dimrange;
         dimid = (this.allDimensionsRange[1]+this.allDimensionsRange[0])*0.5;
-        dimrange = (this.allDimensionsRange[1]-this.allDimensionsRange[0]);
+        dimrange = Math.max(this.allDimensionsRange[1]-this.allDimensionsRange[0],1);
         if(propDimension!==undefined){
             return ((value.elements[propDimension]-dimid)*(canvasRange/dimrange))+canvasMid;
         }else{
