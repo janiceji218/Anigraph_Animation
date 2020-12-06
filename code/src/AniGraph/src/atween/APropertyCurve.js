@@ -5,6 +5,7 @@ import Matrix3x3 from "../amath/Matrix3x3";
 import ASVGElement from "../aweb/svg/ASVGElement";
 import Vector from "../amath/Vector";
 
+const DEFAULT_TWEEN_EDITOR_MARGIN = 0.3;
 
 export class AHandleElement extends ASVGElement{
     static HandleVerts(args){
@@ -237,7 +238,7 @@ export class AKeyframeViewElement extends AObject{
 
 export default class APropertyCurve extends AObject{
     static CURRENT_VALUE_RADIUS=25;
-    static VALUE_RANGE_CANVAS_SCALE=0.5;
+    static VALUE_RANGE_CANVAS_SCALE=DEFAULT_TWEEN_EDITOR_MARGIN;
     constructor(args){
         super(args);
         this.track = (args && args.track!==undefined)? args.track : undefined;

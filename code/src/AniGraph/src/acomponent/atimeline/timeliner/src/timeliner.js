@@ -714,6 +714,52 @@ export default class Timeliner extends AObject{
 
 		});
 
+		dispatcher.on('keyframe.previous', function(layer, value) {
+			// var index = layers.indexOf(layer);
+			var t = data.get('ui:currentTime').value;
+			var v = utils.findTimeinLayer(layer, t);
+			if (typeof(v) === 'number') {
+				// this means that it was not on a existing keyframe. It should add a new keyframe, then, spliced at index v
+				if(v>0){
+					self.setCurrentTime(layer.values[v-1].time);
+				}else{
+					self.setCurrentTime(0);
+				}
+
+			} else {
+				if(v.index>0){
+					self.setCurrentTime(layer.values[v.index-1].time);
+				}else{
+					self.setCurrentTime(0);
+				}
+			}
+
+			self.repaintAll();
+
+		});
+
+		dispatcher.on('keyframe.next', function(layer, value) {
+			// var index = layers.indexOf(layer);
+			var t = data.get('ui:currentTime').value;
+			var v = utils.findTimeinLayer(layer, t);
+			if (typeof(v) === 'number') {
+				// this means that it was not on a existing keyframe. It should add a new keyframe, then, spliced at index v
+				if(v.index<layer.values.length){
+					self.setCurrentTime(layer.values[v].time);
+				}
+
+			} else {
+				if(v.index<layer.values.length){
+					self.setCurrentTime(layer.values[v.index+1].time);
+				}
+			}
+
+			self.repaintAll();
+
+		});
+
+
+
 		dispatcher.on('keyframe.move', function(object, newTime) {
 			// undo_manager.save(new UndoState(data, 'Move Keyframe'));
 			// self.sortLayers();

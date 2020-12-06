@@ -132,7 +132,7 @@ function format_friendly_seconds(s, type) {
 //ABENOTEs: is values actually the keyframes here?
 //returns {index: i, object: value}
 // This makes no sense
-// if it returns a number, that is the index of the previous frame
+// if it returns a number, that is the index that a new frame would have at the given time
 // if it returns an object, it is the index of the keyframe and the keyframe itself
 function findTimeinLayer(layer, time) {
 	var values = layer.values;

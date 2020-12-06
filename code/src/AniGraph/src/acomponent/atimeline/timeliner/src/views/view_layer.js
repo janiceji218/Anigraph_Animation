@@ -53,18 +53,25 @@ function LayerView(layer, dispatcher) {
 	});
 
 
-	// // Prev Keyframe
-	// var button = document.createElement('button');
-	// button.textContent = '<';
-	// button.style.cssText = 'font-size: 12px; padding: 1px; ';
-	// dom.appendChild(button);
+	// Prev Keyframe
+	var previous_keyframe_button = document.createElement('button');
+	previous_keyframe_button.textContent = '<';
+	previous_keyframe_button.style.cssText = 'font-size: 12px; padding: 1px; ';
+	dom.appendChild(previous_keyframe_button);
+	previous_keyframe_button.addEventListener('click', function(e) {
+		dispatcher.fire('keyframe.previous', layer, state.get('_value').value);
+	});
+
+
+	// Next Keyframe
+	var next_keyframe_button = document.createElement('button');
+	next_keyframe_button.textContent = '>';
+	next_keyframe_button.style.cssText = 'font-size: 12px; padding: 1px; ';
+	dom.appendChild(next_keyframe_button);
+	next_keyframe_button.addEventListener('click', function(e) {
+		dispatcher.fire('keyframe.next', layer, state.get('_value').value);
+	});
 	//
-	// // Next Keyframe
-	// button = document.createElement('button');
-	// button.textContent = '>';
-	// button.style.cssText = 'font-size: 12px; padding: 1px; ';
-	// dom.appendChild(button);
-	// //
 
 	function ToggleButton(text) {
 		// for css based button see http://codepen.io/mallendeo/pen/eLIiG
