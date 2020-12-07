@@ -139,7 +139,7 @@ export default class AAnimateMainToolPanel extends ASVGLabMainToolPanel{
                             New:<Toggle onChange={this.setIsCreatingNewShape} checked={this.state.isCreatingNewShape}/>
                         </div>
                         <div className={"d-inline-flex p-3 align-items-right align-self-center"}>
-                            Rotation <AModelSlider model={this.state.selectedModel} min={-2*Math.PI} max={2*Math.PI} getValueFromModel={this.getModelRotation} setModelValue={this.setModelRotation} step={0.1}/>
+                            Rotation <AModelSlider model={this.state.selectedModel} min={-4*Math.PI} max={4*Math.PI} getValueFromModel={this.getModelRotation} setModelValue={this.setModelRotation} step={0.1}/>
                         </div>
                         <div className={"d-inline-flex p-3 align-items-right align-self-center"}>
                             <ASelectPicker

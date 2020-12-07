@@ -48,6 +48,12 @@ export default class ATimelineComponent extends AComponent{
         // this._onTimelinerUpdate();
     }
 
+    onDuplicateKeyframeAtTime(trackName, timeliner_keyframe_json, time){
+        var track = this.state.selectedModel.getKeyframeTrack(trackName);
+        track.duplicateKeyframeWithUIDAtTime(timeliner_keyframe_json.uid, time);
+        this.pushChangesToTimeline();
+    }
+
     onKeyframeMoved(trackName, timeliner_keyframe_json){
         // this.stopListening();
         var track = this.state.selectedModel.getKeyframeTrack(trackName);

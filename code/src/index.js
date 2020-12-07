@@ -4,6 +4,7 @@ import jQuery from 'jquery';
 import React from "react";
 import ReactDOM from "react-dom";
 import ABezierInterpolator from "./classes/interpolation/ABezierInterpolator";
+
 import {
     AGUISpec,
     AMVCAppState,
@@ -12,7 +13,8 @@ import {
     AKeyframe,
     ATweenComponent,
     ATimelineComponent,
-    AAnimatedModel
+    AAnimatedModel,
+    ASliderSpec
 } from "./AniGraph"
 AKeyframe.TweenClass=ABezierInterpolator;
 
@@ -26,7 +28,16 @@ export default function RunAniGraph() {
     const appState = new AMVCAppState({
         model: new AAnimatedModelGroup({name:'rootModel'}),
         newModelClass: AAnimatedModel,
-        GUISpec: new AGUISpec()
+        GUISpec: new AGUISpec({
+            appGUI: [
+                new ASliderSpec({
+                    name: 'TweenZoom',
+                    minVal: 0.1,
+                    maxVal: 1.2,
+                    defaultValue: 0.5
+                })
+            ]
+        })
     });
 
     const app = (

@@ -1,6 +1,7 @@
 import AObject from "../../aobject/AObject";
 import AKeyframeInterpolation from "./AKeyframeInterpolation";
 import ABezierInterpolator from "../../../../classes/interpolation/ABezierInterpolator";
+import Vector from "../../amath/Vector";
 
 export default class AKeyframe extends AObject{
     static TweenClass = AKeyframeInterpolation;
@@ -48,6 +49,14 @@ export default class AKeyframe extends AObject{
             return this.value;
         }
         return this.tween.getValueAtTime(t);
+    }
+
+    getValueCopy(){
+        if(this.value instanceof Vector){
+            return this.value.dup();
+        }else{
+            return this.value;
+        }
     }
 
     getTimelinerJSON(){
