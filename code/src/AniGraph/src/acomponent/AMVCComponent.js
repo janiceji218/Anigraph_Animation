@@ -4,6 +4,7 @@ import AView from "../amvc/views/AView";
 import AModel from "../amvc/models/AModel";
 import AComponent from "./AComponent";
 import AControlledComponent from "./AControlledComponent";
+import AObject from "../aobject/AObject";
 
 export default class AMVCComponent extends AControlledComponent{
     static ModelClassMap = {

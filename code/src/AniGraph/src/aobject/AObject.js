@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { saveAs } from 'file-saver';
 import Vec2 from "../amath/Vec2";
 import Vec3 from "../amath/Vec3";
+import Vector from "../amath/Vector";
 import Matrix3x3 from "../amath/Matrix3x3";
 
 export default class AObject{
@@ -185,11 +186,15 @@ export default class AObject{
                         case 3:
                             return new Vec3(v.elements);
                             break;
+                        case 4:
+                            return new Vector(v.elements);
+                            break;
                         case 9:
                             return new Matrix3x3(v.elements);
                             break;
                         default:
-                            throw new Error(`Did not know what to do with ${v.elements.length} elements`);
+                            return v;
+                            // throw new Error(`Did not know what to do with ${v.elements.length} elements`);
                     }
                 }
                 for (key in obj){

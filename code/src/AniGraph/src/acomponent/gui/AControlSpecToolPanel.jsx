@@ -16,6 +16,8 @@ import AColorPickerSpec from "./specs/AColorPickerSpec";
 import AColorPicker from "./AColorPicker";
 import AUploaderSpec from "./specs/AUploaderSpec";
 import {Uploader} from "rsuite";
+import Vector from "../../amath/Vector";
+import AAnimatedColorPickerSpec from "./specs/AAnimatedColorPickerSpec";
 
 export default class AControlSpecToolPanel extends AToolPanelComponent{
     constructor(props){
@@ -330,6 +332,22 @@ export default class AControlSpecToolPanel extends AToolPanelComponent{
                                 </AColorPicker>
                             </React.Fragment>
                         );
+                    }else{
+                        if(control instanceof AAnimatedColorPickerSpec){
+                            return (
+                                <React.Fragment key={'frag'+control.getUID()}>
+                                    {label}
+                                    <AColorPicker
+                                        value={toolpanel.state[control.key]}
+                                        onChange={(value)=>{
+                                            toolpanel.modelSelectionControlResponse(control, {value: AAnimatedColorPickerSpec.ColorToVec(value)});
+                                        }}
+                                        key={'colorpicker'+control.getUID()}
+                                    >
+                                    </AColorPicker>
+                                </React.Fragment>
+                            );
+                        }
                     }
                 }
             }

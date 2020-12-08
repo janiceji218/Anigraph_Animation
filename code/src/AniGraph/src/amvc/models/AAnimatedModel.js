@@ -23,6 +23,9 @@ export default class AAnimatedModel extends AModel2D{
     get currentDisplayTime(){return this._currentDisplayTime;}
 
     _initEmptyKeyframeTracks(){
+        if(this._keyframeTracks!==undefined){
+            return;
+        }
         this.setKeyframeTracks({});
         var transformkeys = ['position', 'scale', 'rotation'];
         for(let t of transformkeys){
@@ -159,6 +162,47 @@ export default class AAnimatedModel extends AModel2D{
         }
     }
 
+    setProperty(name, value, update=true){
+        super.setProperty(name, value, update);
+        if(this.isUpdatingTime){
+            return;
+        }
+        function _are_equal(a,b){
+            if(a===b){
+                return true;
+            }
+            if(a instanceof Vector){
+                return a.equalTo(b);
+            }
+            if(a instanceof Vec2 || a instanceof Vec3 || a instanceof P2D){
+                return a.equalTo(b);
+            }
+            return false;
+        }
+        const track = this.getKeyframeTrack(name);
+        if(track && track.keyframes.length>0){
+            var prevkey = track.getPreviousKeyframeForTime(this.currentDisplayTime);
+            if(!prevkey){
+                prevkey = track.keyframes[0];
+            }
+            var propval = this.getProperty(name);
+            if(!_are_equal(propval, prevkey.value)){
+                if(prevkey.time===this.currentDisplayTime){
+                    prevkey.value =propval;
+                }else {
+                    var newkey = new AKeyframe({
+                        time: this.currentDisplayTime,
+                        value: propval
+                    });
+                    newkey.tween = new (AKeyframe.TweenClass)({startKey: newkey});
+                    track.addKeyframe(newkey, true);
+                    track.sortKeyframes();
+                    this.notifyAnimationTrackChanged();
+                }
+            }
+        }
+    }
+
     removeKeyframeTrack(name){
         delete this.getKeyframeTracks()[name];
         this.notifyAnimationTrackChanged();
@@ -176,9 +220,9 @@ export default class AAnimatedModel extends AModel2D{
         }
     }
 
-    interpolateProperty(){
-
-    }
+    // interpolateProperty(){
+    //
+    // }
 
 
     // setProperty(name, value, update=true){

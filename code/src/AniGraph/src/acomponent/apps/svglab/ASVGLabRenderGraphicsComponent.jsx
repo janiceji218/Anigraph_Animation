@@ -117,4 +117,11 @@ export default class ASVGLabRenderGraphicsComponent extends AGraphicsComponent2D
 
     saveSVG(){this.getGraphicsContext().saveSVG();}
 
+    getViewClassForModel(model) {
+        if(model.getProperty('viewClass')){
+            return AObject.GetClassNamed(model.getProperty('viewClass'))
+        }
+        return super.getViewClassForModel(model);
+    }
+
 }

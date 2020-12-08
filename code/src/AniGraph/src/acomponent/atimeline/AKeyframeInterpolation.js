@@ -175,7 +175,7 @@ export default class AKeyframeInterpolation extends AObject{
     _initTimeProgressForStartHandle(handle) {
         if(handle.time instanceof Vector){
             if(handle._timeProgress === undefined){
-                handle._timeProgress = new (this.ValueClass)();
+                handle._timeProgress = this.startKey.value.dup();
             }
             for(let d=0;d<handle.time.elements.length;d++){
                 handle._timeProgress.elements[d]=this._timeToProgress(handle.time.elements[d]+this.startKey.time);
@@ -188,7 +188,7 @@ export default class AKeyframeInterpolation extends AObject{
     _initTimeProgressForEndHandle(handle){
         if(handle.time instanceof Vector){
             if(handle._timeProgress === undefined){
-                handle._timeProgress = new (this.ValueClass)();
+                handle._timeProgress = this.startKey.value.dup();
             }
             for(let d=0;d<handle.time.elements.length;d++){
                 handle._timeProgress.elements[d]=this._timeToProgress(handle.time.elements[d]+this.endKey.time);
@@ -212,7 +212,8 @@ export default class AKeyframeInterpolation extends AObject{
                     value: this.getStartHandleValueAbsolute().minus(this.startKey.value)
                 });
             }
-            this._setStartHandleTime(time-this.startKey.time, dimension);
+            // this._setStartHandleTime(time-this.startKey.time, dimension);
+            this._setStartHandleTime(time, dimension);
             this.setStartHandleValueRelative(value-this.startKey.value.elements[dimension], dimension);
             // this.getStartHandle().time.elements[dimension]=time-this.startKey.time;
             // this.getStartHandle().value.elements[dimension]=value-this.startKey.value.elements[dimension];
@@ -224,7 +225,7 @@ export default class AKeyframeInterpolation extends AObject{
                 });
                 // this._initTimeProgressForHandle(this.startHandle);
             }
-            this._setStartHandleTime(time-this.startKey.time);
+            this._setStartHandleTime(time);
             this.setStartHandleValueRelative(value-this.startKey.value);
             // this.getStartHandle().time = time-this.startKey.time;
             // this.getStartHandle().value = value-this.startKey.value;
@@ -253,7 +254,8 @@ export default class AKeyframeInterpolation extends AObject{
                 });
                 // this._initTimeProgressForHandle(this.endHandle);
             }
-            this._setEndHandleTime(time-this.getEndKeyTime())
+            // this._setEndHandleTime(time-this.getEndKeyTime())
+            this._setEndHandleTime(time);
             this.setEndHandleValueRelative(value-this.getEndKeyValue());
             // this.getEndHandle().time = time-this.getEndKeyTime();
             // this.getEndHandle().value = value-this.getEndKeyValue();

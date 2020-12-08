@@ -1,5 +1,6 @@
 import AView from "./AView";
 import ASVGGroup from "../../aweb/svg/ASVGGroup";
+import AAnimatedColorPickerSpec from "../../acomponent/gui/specs/AAnimatedColorPickerSpec";
 
 export default class AView2D extends AView{
     static GUISpecs = [];
@@ -8,6 +9,26 @@ export default class AView2D extends AView{
         if(args && args.group){
             this.setGroup(args.group);
         }
+        this.initGUISpecVars();
+    }
+
+    initGUISpecVars(){
+        for(let g of this.constructor.GUISpecs){
+            if(g.canAnimate){
+                if(this.getModel().getKeyframeTrack(g.key)===undefined){
+                    this.getModel().addKeyframeTrack(g.key);
+                    if((g.defaultValue!==undefined) && (this.getModel().getProperty(g.key)===undefined)){
+                        this.getModel().setProperty(g.key, g.defaultValue);
+                    }
+                }
+
+                // this.getModel().setProperties()
+            }
+        }
+    }
+
+    getAnimatedColorString(name){
+        return AAnimatedColorPickerSpec.VecToColorString(this.getModel().getProperty(name));
     }
 
     /** Get set contextDimensions */
