@@ -4,7 +4,6 @@ import jQuery from 'jquery';
 import React from "react";
 import ReactDOM from "react-dom";
 import ABezierInterpolator from "./classes/interpolation/ABezierInterpolator";
-
 import {
     AGUISpec,
     AMVCAppState,
@@ -17,12 +16,17 @@ import {
     ASliderSpec
 } from "./AniGraph"
 AKeyframe.TweenClass=ABezierInterpolator;
-
-
 import CustomEditorComponent from "./classes/components/CustomEditorComponent";
 import CustomViewsComponent from "./classes/components/CustomViewsComponent";
 import AModelControlPanel from "./classes/components/AModelControlPanel";
 import AAnimateMainToolPanel from "./classes/components/AAnimateMainToolPanel";
+import AObject from "./AniGraph/src/aobject/AObject";
+
+
+AObject.MapClasses({
+    A2Model: AAnimatedModel,
+    A2ModelGroup: AAnimatedModelGroup
+})
 
 export default function RunAniGraph() {
     const appState = new AMVCAppState({

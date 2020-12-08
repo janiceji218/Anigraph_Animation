@@ -51,7 +51,8 @@ export default class ATimelineComponent extends AComponent{
     onDuplicateKeyframeAtTime(trackName, timeliner_keyframe_json, time){
         var track = this.state.selectedModel.getKeyframeTrack(trackName);
         track.duplicateKeyframeWithUIDAtTime(timeliner_keyframe_json.uid, time);
-        this.pushChangesToTimeline();
+        this.state.selectedModel.notifyAnimationTrackChanged();
+        // this.pushChangesToTimeline();
     }
 
     onKeyframeMoved(trackName, timeliner_keyframe_json){

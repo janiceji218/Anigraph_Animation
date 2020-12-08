@@ -18,6 +18,7 @@ export default class AKeyframeTrack extends AObject{
         this.sortKeyframes();
         for(let k of this.keyframes){
             this.keyframeDict[k.getUID()]=k;
+            k.tween.initHandleProgress();
         }
     }
     
@@ -35,6 +36,14 @@ export default class AKeyframeTrack extends AObject{
             rval.values.push(k.getTimelinerJSON());
         }
         return rval;
+    }
+
+    calcHandleProgress(){
+        for(let k of this.keyframes){
+            if(k.tween){
+                k.tween.initHandleProgress();
+            }
+        }
     }
 
     getKeyframeByUID(uid){
@@ -64,7 +73,9 @@ export default class AKeyframeTrack extends AObject{
         for(let k=0;k<this.keyframes.length;k++){
             if(k<(this.keyframes.length-1)){
                 this.keyframes[k].nextKey = this.keyframes[k+1];
-                this.keyframes[k].nextKey.prevKey = this.keyframes[k].nextKey;
+                this.keyframes[k+1].prevKey = this.keyframes[k];
+            }else{
+                this.keyframes[k].nextKey = undefined;// TODO is this right? Should we double up on the last keyframe instead?
             }
             if(this.dimensionRanges.length>1){
                 for(let d=0;d<this.dimensionRanges.length;d++){
@@ -159,11 +170,12 @@ export default class AKeyframeTrack extends AObject{
             tween: keyToDuplicate.tween,
             color: color
         });
-        newKeyframe.tween.startKey = newKeyframe;
-        keyToDuplicate.tween = new (AKeyframe.TweenClass)({startKey: keyToDuplicate});
+
         this.keyframes.push(newKeyframe);
         this.keyframeDict[newKeyframe.getUID()]=newKeyframe;
         this.sortKeyframes();
+        newKeyframe.tween.startKey = newKeyframe;
+        keyToDuplicate.tween = new (AKeyframe.TweenClass)({startKey: keyToDuplicate});
     }
 
     moveKeyframeWithUID(uid, time){

@@ -1,6 +1,6 @@
 import AObject from "../../aobject/AObject";
 import AKeyframeInterpolation from "./AKeyframeInterpolation";
-import ABezierInterpolator from "../../../../classes/interpolation/ABezierInterpolator";
+// import ABezierInterpolator from "../../../../classes/interpolation/ABezierInterpolator";
 import Vector from "../../amath/Vector";
 
 export default class AKeyframe extends AObject{

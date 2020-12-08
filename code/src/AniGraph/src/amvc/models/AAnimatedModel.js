@@ -32,6 +32,13 @@ export default class AAnimatedModel extends AModel2D{
 
     }
 
+    afterLoadFromJSON(args) {
+        super.afterLoadFromJSON(args);
+        for(let t in this.getKeyframeTracks()){
+            this.getKeyframeTrack(t).calcHandleProgress();
+        }
+    }
+
     /**
      * Call this too add a keyframe track for a named model property
      * @param name

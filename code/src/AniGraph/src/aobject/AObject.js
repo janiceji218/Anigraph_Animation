@@ -214,6 +214,11 @@ export default class AObject{
     //</editor-fold>
     //##################\\--Serialization--//##################
 
+    static MapClasses(classMap){
+        for(let c in classMap){
+            this.AObjectClasses[c]=classMap[c];
+        }
+    }
 
 }
 

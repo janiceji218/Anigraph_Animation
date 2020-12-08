@@ -724,7 +724,7 @@ export default class Timeliner extends AObject{
 			if (typeof(v) === 'number') {
 				self.onDuplicateKeyframeAtTime(layer, layer.values[v-1],t);
 			} else {
-				self.onDuplicateKeyframeAtTime(layer, layer.values[v],t);
+				self.onDuplicateKeyframeAtTime(layer, layer.values[v.index],t);
 			}
 
 			self.repaintAll();
