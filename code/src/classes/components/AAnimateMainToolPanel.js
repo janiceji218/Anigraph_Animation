@@ -15,6 +15,7 @@ export default class AAnimateMainToolPanel extends ASVGLabMainToolPanel{
         this.setSelectedKeyframeTrackName = this.setSelectedKeyframeTrackName.bind(this);
         this.getSelectedKeyframeTrackName = this.getSelectedKeyframeTrackName.bind(this);
         this.onSelectedKeyframeTrackChanged = this.onSelectedKeyframeTrackChanged.bind(this);
+        this.onSelectedModelChanged = this.onSelectedModelChanged.bind(this);
     }
 
     onSelectedKeyframeTrackChanged(selectedKeyframeTrackName){
@@ -27,12 +28,18 @@ export default class AAnimateMainToolPanel extends ASVGLabMainToolPanel{
         this.addAppStateListener('selectedKeyframeTrackName', function(selectedKeyframeTrackName){
             self.onSelectedKeyframeTrackChanged(selectedKeyframeTrackName);
         })
+        this.addAppEventListener('keyframeTrackAdded', function(){
+            self.onSelectedModelChanged(self.getSelectedModel());
+        })
     }
 
 
-    onSelectedControllersChanged(selectedModelControllers){
+    onSelectedControllersChanged(selectedModelControllers) {
         super.onSelectedControllersChanged(selectedModelControllers);
-        const selectedModel = selectedModelControllers && selectedModelControllers.length? selectedModelControllers[0].getModel() : undefined;
+        const selectedModel = selectedModelControllers && selectedModelControllers.length ? selectedModelControllers[0].getModel() : undefined;
+        this.onSelectedModelChanged(selectedModel);
+    }
+    onSelectedModelChanged(selectedModel){
         if(selectedModel) {
             this.setState({
                 availableKeyframeTracks: this._getModeDataItems(selectedModel.getKeyframeTrackNames())

@@ -20,6 +20,7 @@ export default class AView2D extends AView{
                     if((g.defaultValue!==undefined) && (this.getModel().getProperty(g.key)===undefined)){
                         this.getModel().setProperty(g.key, g.defaultValue);
                     }
+                    this.getComponentAppStateObject().signalEvent('keyframeTrackAdded');
                 }
 
                 // this.getModel().setProperties()

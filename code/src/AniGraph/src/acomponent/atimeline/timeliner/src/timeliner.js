@@ -1089,7 +1089,7 @@ export default class Timeliner extends AObject{
 			switch (type) {
 				case 'scrollto':
 					layer_panel.scrollTo(scrollTo);
-					timeline.scrollTo(scrollTo);
+					timeline.scrollTo(scrollTo, layer_panel);
 					break;
 				//		case 'pageup':
 				// 			scrollTop -= pageOffset;
