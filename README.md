@@ -10,11 +10,7 @@ The core part of Assignment 7 will consist of 2 parts:
     
 2. We will ask you to create a few simple example animations based on some of the basic principles of animation.
 
-If you are looking at this repo on Friday: we will replace this with more specific instructions tomorrow and release a video demo for the assignment.
-In the meantime, we are releasing the system for you to try out. Animation should be functional, but before you complete your Bezier spline code it will perform linear interpolation.
-
-Testing Spline Interpolation:
-
+Check [`code/classes/interpolation/ABezierInterpolator.js`](code/classes/interpolation/ABezierInterpolator.js) and the videos on Canvas under the Assignment 7 module for more details.
 
 
 ## Animation GUI:
