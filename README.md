@@ -8,7 +8,7 @@ The core part of Assignment 7 will consist of 2 parts:
     - This will not require much code, but will require you to work through what it means to apply spline interpolation to different properties using 2D time-value controls.
     - This code will be written entirely in the file [`./code/src/classes/interpolation/ABezierInterpolator.js`](./code/src/classes/interpolation/ABezierInterpolator.js)
     
-2. We will ask you to create a few simple example animations based on some of the basic principles of animation.
+2. We will ask you to create a simple example animation based on some of the basic principles of animation.
 
 Check [`./code/src/classes/interpolation/ABezierInterpolator.js`](./code/src/classes/interpolation/ABezierInterpolator.js) and the videos on Canvas under the Assignment 7 module for more details.
 
