@@ -29,7 +29,9 @@ export default class ASceneGraphEditor extends AGUIComponent{
         this.getAppState('onUngroupChildrenButtonClick')();
     }
 
-
+    onRegroupAnimationsButtonClick(){
+        this.getAppState('onRegroupAnimationsButtonClick')();
+    }
 
 
     bindMethods() {
@@ -37,6 +39,7 @@ export default class ASceneGraphEditor extends AGUIComponent{
         this.onDeleteButtonClick = this.onDeleteButtonClick.bind(this);
         this.onGroupChildrenButtonClick = this.onGroupChildrenButtonClick.bind(this);
         this.onUngroupChildrenButtonClick = this.onUngroupChildrenButtonClick.bind(this);
+        this.onRegroupAnimationsButtonClick = this.onRegroupAnimationsButtonClick.bind(this);
     }
 
     render(){
@@ -57,6 +60,7 @@ export default class ASceneGraphEditor extends AGUIComponent{
                         {getButton("Delete", this.onDeleteButtonClick, 1)}
                         {getButton("GroupChildren", this.onGroupChildrenButtonClick, 2)}
                         {getButton("UngroupChildren", this.onUngroupChildrenButtonClick, 2)}
+                        {getButton("RegroupAnimations", this.onRegroupAnimationsButtonClick, 2)}
                     </div>
                 </div>
                 <div className="row">

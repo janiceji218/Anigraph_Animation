@@ -78,9 +78,9 @@ export default class AMVCComponent extends AControlledComponent{
     initAppState(){
         super.initAppState();
         const self = this;
-        this.setAppState('loadNewModel', function(model){
-            self.loadNewModel(model);
-        });
+        // this.setAppState('loadNewModel', function(model){
+        //     self.loadNewModel(model);
+        // });
     }
 
     _getMainControllerForModel(model){
@@ -102,6 +102,8 @@ export default class AMVCComponent extends AControlledComponent{
     loadNewModel(model){
         this.reset();
         this.componentController.getModel().addChild(model);
+        // this.addNewModel(model);
+        this.componentController.getModel()._claimChildren();
         this.model.notifyPropertySet({name:'model', value: model, update:true});
     }
 

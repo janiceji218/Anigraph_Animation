@@ -176,6 +176,11 @@ export default class AController extends AObjectNode{
         return rvals;
     }
 
+    getConnectedControllerForModel(model){
+        console.log(this.getChildrenList());
+    }
+
+
     /**
      * Adds the given model as a child to the controller's model, and returns the corresponding child controller that is created.
      * Note that this works by first adding the child to the model, then looking for a corresponding child controller.

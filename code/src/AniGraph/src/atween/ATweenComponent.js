@@ -17,6 +17,17 @@ export default class ATweenComponent extends ASupplementalGraphicsComponent2D{
         return this.getAppStateObject().getSelectedModel();
     }
 
+    onModelRelease(){
+
+    }
+
+    onModelAttachedToNewParent(modelParent){
+        // super.onModelAttachedToNewParent(modelParent);
+        console.log(modelParent);
+        console.log(this);
+        return;
+    }
+
     onModelUpdate(args){
         this.getComponentController().onModelUpdate(args);
 

@@ -165,7 +165,8 @@ export default class A2DShapeEditorToolPanel extends AGUIComponent{
         if(aobj.recenterAnchorInSubtree){
             aobj.recenterAnchorInSubtree();
         }
-        this.getAppState('loadNewModel')(aobj);
+        this.getAppState('mainComponent').loadNewModel(aobj);
+        // this.getAppState('loadNewModel')(aobj);
     }
 
     bindMethods() {

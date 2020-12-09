@@ -41,7 +41,8 @@ export default function RunAniGraph() {
                     defaultValue: 0.5
                 })
             ]
-        })
+        }),
+        autoGroupIsOn: true
     });
 
     const app = (

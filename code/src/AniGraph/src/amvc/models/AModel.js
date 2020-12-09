@@ -178,10 +178,11 @@ export default class AModel extends AHasModelListeners{
     addChild(child){
         console.assert(child.getParent() === undefined, {child: child, childparent: child.getParent(), self:this, errorMsg:"tried to add child that already had parent"});
         super.addChild(child);
-        this.notifyListeners({
-            type: 'addChild',
-            childModel: child
-        })
+        this.notifyChildAdded(child);
+        // this.notifyListeners({
+        //     type: 'addChild',
+        //     childModel: child
+        // })
     }
 
 

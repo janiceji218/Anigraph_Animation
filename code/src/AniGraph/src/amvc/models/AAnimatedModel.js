@@ -5,6 +5,7 @@ import Vector from "../../amath/Vector";
 import Vec2, {P2D} from "../../amath/Vec2";
 import Vec3 from "../../amath/Vec3";
 import AKeyframe from "../../acomponent/atimeline/AKeyframe";
+import Matrix3x3 from "../../amath/Matrix3x3";
 export default class AAnimatedModel extends AModel2D{
     constructor(args) {
         super(args);
@@ -62,7 +63,7 @@ export default class AAnimatedModel extends AModel2D{
     setKeyframeTrack(name, value){
         var kfts = this.getKeyframeTracks();
         if(kfts===undefined){
-            this._initEmptryKeyframeTracks();
+            this._initEmptyKeyframeTracks();
         }
         // kfts.set(name, value);
         kfts[name]=value;
@@ -71,6 +72,37 @@ export default class AAnimatedModel extends AModel2D{
         this.notifyAnimationTrackChanged({
             track: kfts[name]
         });
+    }
+
+    takeAnimationsFrom(other){
+        this.setKeyframeTracks(other.getKeyframeTracks());
+        other._keyframeTracks = undefined;
+        other._initEmptyKeyframeTracks();
+        this.setMatrixAndPosition(other.matrix, other.getPosition());
+        // if(this.getKeyframeTrack('position') && this.getKeyframeTrack('position').keyframes.length>0){
+        //     other.setPosition(new Vec2(0,0));
+        // }
+        // if(this.getKeyframeTrack('scale') && this.getKeyframeTrack('scale').keyframes.length>0){
+        //     other.setScale(new Vec2(1,1));
+        // }
+        // if(this.getKeyframeTrack('rotation') && this.getKeyframeTrack('rotation').keyframes.length>0){
+        //     other.setRotation(0);
+        // }
+        other.setMatrixAndPosition(Matrix3x3.Identity(), new Vec2(0,0));
+        this.notifyListeners({
+            type: 'animationDataChange',
+        })
+        other.notifyListeners({
+            type: 'animationDataChange',
+        })
+    }
+
+    copyAnimationsFrom(other){
+        this.setKeyframeTracks(other.copyKeyframeTracks());
+    }
+
+    copyKeyframeTracks(){
+        return this.getKeyframeTracks();
     }
 
     notifyAnimationTrackChanged(args){

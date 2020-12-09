@@ -330,10 +330,7 @@ export default class AShapeManipulationBaseApp extends AGraphicsComponent2D {
                 this.signalAppEvent('graphChanged');
             }
         }
-
-
         return this._getMainControllerForModel(args.model);
-
     }
 
     /**

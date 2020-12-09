@@ -48,6 +48,7 @@ export default class A2DShapeEditorComponent extends AShapeManipulationBaseApp {
         this.deleteSelectedShape = this.deleteSelectedShape.bind(this);
         this.groupSelectionChildren = this.groupSelectionChildren.bind(this);
         this.ungroupSelectionChildren = this.ungroupSelectionChildren.bind(this);
+        this.regroupSelectionAnimations = this.regroupSelectionAnimations.bind(this);
     }
 
     //<editor-fold desc="Controllers">
@@ -181,6 +182,7 @@ export default class A2DShapeEditorComponent extends AShapeManipulationBaseApp {
         this.setAppState('onRandomShapeButtonClick', this.addRandomShape);
         this.setAppState('onDeleteButtonClick', this.deleteSelectedShape);
         this.setAppState('onGroupChildrenButtonClick', this.groupSelectionChildren);
+        this.setAppState('onRegroupAnimationsButtonClick', this.regroupSelectionAnimations);
         this.setAppState('onUngroupChildrenButtonClick', this.ungroupSelectionChildren);
 
         this.addAppStateListener('isCreatingNewShape', function(isCreatingNewShape){
@@ -234,6 +236,19 @@ export default class A2DShapeEditorComponent extends AShapeManipulationBaseApp {
         });
         this.updateGraph();
     }
+
+    // TODO HERE
+    regroupSelectionAnimations(){
+        const selectedModel = this.getSelectedModel();
+        const newModelGroup = selectedModel.insertParentGroup();
+        newModelGroup.takeAnimationsFrom(selectedModel);
+        // const newModelGroup = selectedModel.groupChildren();
+        this.selectShape({
+            model: newModelGroup,
+        });
+        this.updateGraph();
+    }
+
     ungroupSelectionChildren(){
         const selectedModel = this.getSelectedModel();
 

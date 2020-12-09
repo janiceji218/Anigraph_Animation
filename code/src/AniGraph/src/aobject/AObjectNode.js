@@ -50,6 +50,7 @@ export default class AObjectNode extends AObject {
         }
     }
 
+
     reparent(newParent){
         this._removeFromParent();
         this._attachToNewParent(newParent);
@@ -79,15 +80,20 @@ export default class AObjectNode extends AObject {
 
     afterLoadFromJSON(args){
         super.afterLoadFromJSON(args);
-        function claimChildren(obj){
-            const parent = obj;
-            obj.mapOverChildren(child=>{
-                child.setParent(parent);
-                claimChildren(child);
-            });
-        }
-        claimChildren(this);
         // this.notifyDescendantsAdded();
+        this._claimChildren()
+    }
+
+    _claimChildren(){
+        this.constructor._ClaimChildren(this);
+    }
+
+    static _ClaimChildren(obj){
+        const parent = obj;
+        obj.mapOverChildren(child=>{
+            child.setParent(parent);
+            this._ClaimChildren(child);
+        });
     }
 
     // /**
