@@ -7,6 +7,8 @@ import Vec3 from "../../amath/Vec3";
 import AKeyframe from "../../acomponent/atimeline/AKeyframe";
 import Matrix3x3 from "../../amath/Matrix3x3";
 export default class AAnimatedModel extends AModel2D{
+    static DEFAULT_TRANSFORM_ANIMATION_TRACKS = ['position', 'scale', 'rotation', 'anchorshift'];
+
     constructor(args) {
         super(args);
         var keyframeTracks = (args && args.keyframeTracks!==undefined)? args.keyframeTracks : undefined;
@@ -28,7 +30,7 @@ export default class AAnimatedModel extends AModel2D{
             return;
         }
         this.setKeyframeTracks({});
-        var transformkeys = ['position', 'scale', 'rotation'];
+        var transformkeys = this.constructor.DEFAULT_TRANSFORM_ANIMATION_TRACKS;
         for(let t of transformkeys){
             this.addKeyframeTrack(t);
         }
@@ -127,6 +129,10 @@ export default class AAnimatedModel extends AModel2D{
                 case 'rotation':
                     self.setRotation(value);
                     break;
+                case 'anchorshift':
+                    self.setAnchorShift(value);
+                    break;
+
                 default:
                     self.setProperty(key, value);
             }
@@ -273,7 +279,12 @@ export default class AAnimatedModel extends AModel2D{
 export class AAnimatedModelGroup extends AAnimatedModel{
     constructor(args){
         super(args);
+        var loopTime = (args && args.loopTime!==undefined)? args.loopTime : 10.0;
     }
+
+    /** Get set loopTime */
+    set loopTime(value){this.setProperty('loopTime', value);}
+    get loopTime(){return this.getProperty('loopTime');}
 
     /**
      * Convenience accessor to see if a model is an A2ModelGroup. So, `model.isModelGroup` will be

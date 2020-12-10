@@ -17,6 +17,10 @@ export default class AView extends AObjectNode{
         return this.getController().getComponent().getAppState(name);
     }
 
+    setComponentAppState(name, value, update=true, setReactState=true){
+        return this.getController().getComponent().setAppState(name, value, update, setReactState);
+    }
+
     getComponentAppStateObject() {
         return this.getController().getComponent().getAppStateObject();
     }

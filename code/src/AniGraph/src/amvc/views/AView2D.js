@@ -1,6 +1,7 @@
 import AView from "./AView";
 import ASVGGroup from "../../aweb/svg/ASVGGroup";
 import AAnimatedColorPickerSpec from "../../acomponent/gui/specs/AAnimatedColorPickerSpec";
+import ASelectionControlSpec from "../../acomponent/gui/specs/ASelectionControlSpec";
 
 export default class AView2D extends AView{
     static GUISpecs = [];
@@ -14,6 +15,16 @@ export default class AView2D extends AView{
 
     initGUISpecVars(){
         for(let g of this.constructor.GUISpecs){
+            if(g instanceof ASelectionControlSpec){
+                if(this.getModel().getProperty(g.optionsKey)===undefined){
+                    this.getModel().setProperty(g.optionsKey, g.options);
+                }
+                // if(this.getModel().getProperty(g.optionsKey)){
+                //     this.setComponentAppState(g.optionsKey, [...g.options, ...this.getModel().getProperty(g.optionsKey)]);
+                // }else{
+                //     this.setComponentAppState(g.optionsKey, [...g.options]);
+                // }
+            }
             if(g.canAnimate){
                 if(this.getModel().getKeyframeTrack(g.key)===undefined){
                     this.getModel().addKeyframeTrack(g.key);

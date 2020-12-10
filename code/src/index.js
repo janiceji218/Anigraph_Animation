@@ -42,7 +42,8 @@ export default function RunAniGraph() {
                 })
             ]
         }),
-        autoGroupIsOn: true
+        autoGroupIsOn: true,
+        loopTime: 10.0
     });
 
     const app = (

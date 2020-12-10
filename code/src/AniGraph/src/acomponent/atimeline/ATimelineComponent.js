@@ -18,8 +18,11 @@ export default class ATimelineComponent extends AComponent{
     get currentTime(){return this.getAppState('currentTime');}
 
     /** Get set sequenceDuration */
-    set sequenceDuration(value){this._sequenceDuration = value;}
-    get sequenceDuration(){return this._sequenceDuration;}
+    // set sequenceDuration(value){this._sequenceDuration = value;}
+    // get sequenceDuration(){return this._sequenceDuration;}
+    /** Get set LoopTime */
+    set loopTime(value){this.setAppState('loopTime', value);}
+    get loopTime(){return this.getAppState('loopTime');}
 
 
     constructor(args) {
@@ -102,7 +105,9 @@ export default class ATimelineComponent extends AComponent{
     }
 
     onSequenceDurationUpdate(value){
-        this.sequenceDuration=value;
+        // this.sequenceDuration=value;
+        // this.state.selectedModel.loopTime=value;
+        this.loopTime=value;
     }
 
     /**
@@ -132,7 +137,7 @@ export default class ATimelineComponent extends AComponent{
 
     pushChangesToTimeline(){
         if(this.timeline) {
-            this.timeline.loadKeyframeTracksFromModel(this.model);
+            this.timeline.loadKeyframeTracksFromModel(this.model, this.loopTime);
         }
     }
 

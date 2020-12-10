@@ -312,7 +312,7 @@ export default class Timeliner extends AObject{
 		this.updateState();
 	}
 
-	loadKeyframeTracksFromModel(model){
+	loadKeyframeTracksFromModel(model, loopTime){
 		var kfts = model? model.getKeyframeTracks():undefined;
 		if(kfts===undefined || kfts.size===0){
 			this.loadLayers([]);
@@ -323,7 +323,25 @@ export default class Timeliner extends AObject{
 		for(let track of Object.values(kfts)){
 			layerjsons.push(track.getTimelinerJSON());
 		}
+		// var totalTime = model.loopTime? model.loopTime : undefined;
+		// if(totalTime!==undefined){
+		// 	this.data.data.ui.totalTime = totalTime;
+		// }else{
+		// 	model.loopTime=this.data.data.ui.totalTime;
+		// }
+		this.data.data.ui.totalTime = loopTime;
 		this.loadLayers(layerjsons, model.name);
+	}
+
+	setLoopTime(time){
+		// "ui": {
+		// 	"currentTime": 6.8,
+		// 		"totalTime": 20,
+		// 		"scrollTime": 0,
+		// 		"timeScale": 60
+		// },
+		this.data.data.ui.totalTime = time;
+		this.updateState();
 	}
 
 	loadLayers(layers, title){
@@ -339,9 +357,6 @@ export default class Timeliner extends AObject{
 		this.undo_manager.clear();
 		this.undo_manager.save(new UndoState(this.data, 'Loaded'), true);
 		this.updateState();
-
-
-
 	}
 
 	updateState() {

@@ -18,6 +18,7 @@ import AUploaderSpec from "./specs/AUploaderSpec";
 import {Uploader} from "rsuite";
 import Vector from "../../amath/Vector";
 import AAnimatedColorPickerSpec from "./specs/AAnimatedColorPickerSpec";
+import ASelectionControlSpec from "./specs/ASelectionControlSpec";
 
 export default class AControlSpecToolPanel extends AToolPanelComponent{
     constructor(props){
@@ -98,6 +99,14 @@ export default class AControlSpecToolPanel extends AToolPanelComponent{
                     }else{
                         stateDict[mcontrol.key] = selectedModel.getProperty(mcontrol.key);
                     }
+                    // if(mcontrol instanceof ASelectionControlSpec){
+                    //     stateDict[mcontrol.optionsKey]=self._getDropdownDataItems([...selectedModel.getProperty(mcontrol.optionsKey)]);
+                    //     // if(selectedModel.getProperty(mcontrol.optionsKey)){
+                    //     //     stateDict[mcontrol.optionsKey]=self._getDropdownDataItems([...mcontrol.options, ...selectedModel.getProperty(mcontrol.optionsKey)]);
+                    //     // }else{
+                    //     //     stateDict[mcontrol.optionsKey]=self._getDropdownDataItems([...mcontrol.options]);
+                    //     // }
+                    // }
                 }
                 self.setState(stateDict);
             }
@@ -106,17 +115,29 @@ export default class AControlSpecToolPanel extends AToolPanelComponent{
         for(let acontrol of self.appStateControls){
             // var statename = acontrol.key;
             if(typeof acontrol.defaultValue !== undefined && this.getAppState(acontrol.key)===undefined){
-                this.setAppState(acontrol.key, acontrol.defaultValue);
+                self.setAppState(acontrol.key, acontrol.defaultValue);
                 let statedict = {};
                 statedict[acontrol.key]=acontrol.defaultValue;
                 self.setState(statedict);
             }
-
             this.addAppStateListener(acontrol.key, function(value){
                 let statedict = {};
                 statedict[acontrol.key]=value;
                 self.setState(statedict);
             }, acontrol.key);
+
+            if(acontrol instanceof ASelectionControlSpec && this.getAppState(acontrol.optionsKey)===undefined){
+                self.setAppState(acontrol.optionsKey, acontrol.options);
+                let statedict = {};
+                statedict[acontrol.optionsKey]=acontrol.options;
+                self.setState(statedict);
+
+                self.addAppStateListener(acontrol.optionsKey, function(value){
+                    let statedict = {};
+                    statedict[acontrol.optionsKey]=self._getDropdownDataItems(value);
+                    self.setState(statedict);
+                }, acontrol.optionsKey);
+            }
         }
     }
 
@@ -169,8 +190,6 @@ export default class AControlSpecToolPanel extends AToolPanelComponent{
         this.setAppState(statename, args.value);
         this.signalAppEvent('update');
     }
-
-
 
     render(){
         return this.renderGUISpec();
@@ -237,42 +256,59 @@ export default class AControlSpecToolPanel extends AToolPanelComponent{
                         </Checkbox>
                     );
                 }else{
-                    if(control instanceof AColorPickerSpec){
+                    if(control instanceof ASelectionControlSpec){
                         return (
-                            <div key={'frag'+control.getUID()}>
-                                {label}
-                                <AColorPicker
-                                    value={toolpanel.state[control.key]}
-                                    onChange={(value)=>{
-                                        toolpanel.appControlResponse(control, {value: value});
-                                    }}
-                                    key={'colorpicker'+control.getUID()}
-                                >
-                                </AColorPicker>
-                            </div>
+                            <ASelectPicker key={'frag' + control.getUID()}
+                                placeholder={control.name}
+                                onChange={(value) => {
+                                    toolpanel.appControlResponse(control, {value: value});
+                                }}
+                                data={toolpanel.state[control.optionsKey]}
+                                value={toolpanel.state[control.key]}
+                            />
                         );
-                    }else{
-                        if(control instanceof AUploaderSpec){
+                    }else {
+                        if (control instanceof AColorPickerSpec) {
                             return (
-                                <div key={'frag'+control.getUID()}>
-                                    <div className={"d-inline-flex p-2 align-items-center align-self-center"}>
-                                        <input type='file'
-                                               id={'file'+control.key}
-                                               className='input-file'
-                                               accept='obj'
-                                               style={{display:'none'}}
-                                               onChange={function(e){
-                                                   if(toolpanel.state[control.key]!==undefined) {
-                                                       toolpanel.state[control.key](e.target.files[0]);
-                                                   }else {console.log(e);}
-                                               }}
-                                        />
-                                        <input type="button" id="loadFileXml" value={control.label}
-                                            onClick={()=>{document.getElementById('file'+control.key).click();}}/>
-                                        {/*onUpload={}*/}
-                                    </div>
+                                <div key={'frag' + control.getUID()}>
+                                    {label}
+                                    <AColorPicker
+                                        value={toolpanel.state[control.key]}
+                                        onChange={(value) => {
+                                            toolpanel.appControlResponse(control, {value: value});
+                                        }}
+                                        key={'colorpicker' + control.getUID()}
+                                    >
+                                    </AColorPicker>
                                 </div>
                             );
+                        } else {
+                            if (control instanceof AUploaderSpec) {
+                                return (
+                                    <div key={'frag' + control.getUID()}>
+                                        <div className={"d-inline-flex p-2 align-items-center align-self-center"}>
+                                            <input type='file'
+                                                   id={'file' + control.key}
+                                                   className='input-file'
+                                                   accept='obj'
+                                                   style={{display: 'none'}}
+                                                   onChange={function (e) {
+                                                       if (toolpanel.state[control.key] !== undefined) {
+                                                           toolpanel.state[control.key](e.target.files[0]);
+                                                       } else {
+                                                           console.log(e);
+                                                       }
+                                                   }}
+                                            />
+                                            <input type="button" id="loadFileXml" value={control.label}
+                                                   onClick={() => {
+                                                       document.getElementById('file' + control.key).click();
+                                                   }}/>
+                                            {/*onUpload={}*/}
+                                        </div>
+                                    </div>
+                                );
+                            }
                         }
                     }
                 }
@@ -318,35 +354,48 @@ export default class AControlSpecToolPanel extends AToolPanelComponent{
                         </Checkbox>
                     );
                 } else{
-                    if(control instanceof AColorPickerSpec){
+                    if(control instanceof ASelectionControlSpec){
                         return (
-                            <React.Fragment key={'frag'+control.getUID()}>
-                                {label}
-                                <AColorPicker
-                                    value={toolpanel.state[control.key]}
-                                    onChange={(value)=>{
-                                        toolpanel.modelSelectionControlResponse(control, {value: `rgba(${ value.rgb.r }, ${ value.rgb.g }, ${ value.rgb.b }, ${ value.rgb.a })`});
-                                    }}
-                                    key={'colorpicker'+control.getUID()}
-                                >
-                                </AColorPicker>
-                            </React.Fragment>
+                            <ASelectPicker key={'frag' + control.getUID()}
+                                placeholder={control.name}
+                                onChange={(value) => {
+                                    toolpanel.modelSelectionControlResponse(control, {value: value});
+                                }}
+                                data={toolpanel.getSelectedModel()? toolpanel._getDropdownDataItems(toolpanel.getSelectedModel().getProperty(control.optionsKey)): []}
+                                value={toolpanel.state[control.key]}
+                            />
                         );
-                    }else{
-                        if(control instanceof AAnimatedColorPickerSpec){
+                    }else {
+                        if (control instanceof AColorPickerSpec) {
                             return (
-                                <React.Fragment key={'frag'+control.getUID()}>
+                                <React.Fragment key={'frag' + control.getUID()}>
                                     {label}
                                     <AColorPicker
                                         value={toolpanel.state[control.key]}
-                                        onChange={(value)=>{
-                                            toolpanel.modelSelectionControlResponse(control, {value: AAnimatedColorPickerSpec.ColorToVec(value)});
+                                        onChange={(value) => {
+                                            toolpanel.modelSelectionControlResponse(control, {value: `rgba(${value.rgb.r}, ${value.rgb.g}, ${value.rgb.b}, ${value.rgb.a})`});
                                         }}
-                                        key={'colorpicker'+control.getUID()}
+                                        key={'colorpicker' + control.getUID()}
                                     >
                                     </AColorPicker>
                                 </React.Fragment>
                             );
+                        } else {
+                            if (control instanceof AAnimatedColorPickerSpec) {
+                                return (
+                                    <React.Fragment key={'frag' + control.getUID()}>
+                                        {label}
+                                        <AColorPicker
+                                            value={toolpanel.state[control.key]}
+                                            onChange={(value) => {
+                                                toolpanel.modelSelectionControlResponse(control, {value: AAnimatedColorPickerSpec.ColorToVec(value)});
+                                            }}
+                                            key={'colorpicker' + control.getUID()}
+                                        >
+                                        </AColorPicker>
+                                    </React.Fragment>
+                                );
+                            }
                         }
                     }
                 }
