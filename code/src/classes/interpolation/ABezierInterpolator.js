@@ -11,8 +11,8 @@ export default class ABezierInterpolator extends AKeyframeInterpolation {
 
     getValueAtTime(time) {
         //Switch which line is commented to use your interpolation method instead
-        return this.getValueAtTimeLinear(time);
-        // return this.getValueAtTimeBezier(time);
+        // return this.getValueAtTimeLinear(time);
+        return this.getValueAtTimeBezier(time);
     }
 
     getControlPointArrays(){
@@ -92,7 +92,11 @@ export default class ABezierInterpolator extends AKeyframeInterpolation {
      * @constructor
      */
     static GetSplineValueForAlpha(alpha, p0, p1, p2, p3){
-        // Your code here
+        const real_alpha = 1 - alpha
+        const beta = alpha
+        const v = Math.pow(real_alpha, 3) * p0 + 3 * Math.pow(real_alpha, 2) * beta * p1 +
+            3 * real_alpha * Math.pow(beta, 2) * p2 + Math.pow(beta, 3) * p3
+        return v
     }
 
     /**
@@ -107,7 +111,8 @@ export default class ABezierInterpolator extends AKeyframeInterpolation {
      * @constructor
      */
     static GetSplineYAtX(x, xy0,xy1,xy2,xy3){
-        // Your code here
+        const alpha_x = ABezierInterpolator.GetSplineAlphaForValue(x, xy0[0], xy1[0], xy2[0], xy3[0])
+        return ABezierInterpolator.GetSplineValueForAlpha(alpha_x, xy0[1], xy1[1], xy2[1], xy3[1])
     }
 
     /**
@@ -121,8 +126,24 @@ export default class ABezierInterpolator extends AKeyframeInterpolation {
      * @param p3
      * @constructor
      */
-    static GetSplineAlphaForValue(value, p0,p1,p2,p3){
-        // Your code here
+    static GetSplineAlphaForValue(value, p0, p1, p2, p3){
+        const epsilon = 0.001
+        let start = 0
+        let end = 1
+
+        while (true) {
+            let mid = (start + end) / 2.000
+            let calcValue = ABezierInterpolator.GetSplineValueForAlpha(mid, p0, p1, p2, p3)
+            let err = Math.abs(value - calcValue)
+
+            if (err <= epsilon) {console.log(mid); return mid }
+            else if (calcValue > value) {
+                end = mid
+            }
+            else if (calcValue < value) {
+                start = mid
+            }
+        }
     }
 
     //</editor-fold>
