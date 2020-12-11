@@ -2,6 +2,7 @@ import AView from "./AView";
 import ASVGGroup from "../../aweb/svg/ASVGGroup";
 import AAnimatedColorPickerSpec from "../../acomponent/gui/specs/AAnimatedColorPickerSpec";
 import ASelectionControlSpec from "../../acomponent/gui/specs/ASelectionControlSpec";
+import Color,{RGBA} from "../../amath/Color";
 
 export default class AView2D extends AView{
     static GUISpecs = [];
@@ -16,11 +17,11 @@ export default class AView2D extends AView{
     initGUISpecVars(){
         for(let g of this.constructor.GUISpecs){
             if(g instanceof ASelectionControlSpec){
-                if(this.getModel().getProperty(g.optionsKey)===undefined){
-                    this.getModel().setProperty(g.optionsKey, g.options);
+                if(this.getGUIVar(g.optionsKey)===undefined){
+                    this.setGUIVar(g.optionsKey, g.options);
                 }
-                // if(this.getModel().getProperty(g.optionsKey)){
-                //     this.setComponentAppState(g.optionsKey, [...g.options, ...this.getModel().getProperty(g.optionsKey)]);
+                // if(this.getGUIVar(g.optionsKey)){
+                //     this.setComponentAppState(g.optionsKey, [...g.options, ...this.getGUIVar(g.optionsKey)]);
                 // }else{
                 //     this.setComponentAppState(g.optionsKey, [...g.options]);
                 // }
@@ -28,19 +29,34 @@ export default class AView2D extends AView{
             if(g.canAnimate){
                 if(this.getModel().getKeyframeTrack(g.key)===undefined){
                     this.getModel().addKeyframeTrack(g.key);
-                    if((g.defaultValue!==undefined) && (this.getModel().getProperty(g.key)===undefined)){
-                        this.getModel().setProperty(g.key, g.defaultValue);
+                    if((g.defaultValue!==undefined) && (this.getGUIVar(g.key)===undefined)){
+                        this.setGUIVar(g.key, g.defaultValue);
                     }
                     this.getComponentAppStateObject().signalEvent('keyframeTrackAdded');
                 }
-
                 // this.getModel().setProperties()
+            }
+            if(g.defaultValue!==undefined){
+                if(this.getGUIVar(g.key)===undefined){
+                    this.setGUIVar(g.key, g.defaultValue);
+                }
             }
         }
     }
 
+    getGUIVar(key){
+        return this.getModel().getProperty(key);
+    }
+    setGUIVar(key, value){
+        return this.getModel().setProperty(key, value);
+    }
+
     getAnimatedColorString(name){
-        return AAnimatedColorPickerSpec.VecToColorString(this.getModel().getProperty(name));
+        // return AAnimatedColorPickerSpec.VecToColorString(this.getGUIVar(name));
+        var c = this.getGUIVar(name);
+        if(c){
+            return c.toRGBAString();
+        }
     }
 
     /** Get set contextDimensions */
