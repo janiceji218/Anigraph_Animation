@@ -124,7 +124,8 @@ export default class ATweenController extends ANonGraphComponentController2D{
             default:
                 break;
         }
-        return super.onModelUpdate(args);
+        return this._defaultModelUpdateResponse();
+        // super.onModelUpdate(args);
     }
 
 }

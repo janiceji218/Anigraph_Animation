@@ -7,6 +7,8 @@ import ASliderSpec from "./ASliderSpec";
 import AColorPickerSpec from "./AColorPickerSpec";
 import AUploaderSpec from "./AUploaderSpec";
 import ACheckTreeSpec from "./ACheckTreeSpec";
+import AAnimatedColorPickerSpec from "./AAnimatedColorPickerSpec";
+import ASelectionControlSpec from "./ASelectionControlSpec";
 export {
     AGUIElementSpec,
     AGUIElementSpecGroup,
@@ -16,5 +18,7 @@ export {
     ASliderSpec,
     AColorPickerSpec,
     AUploaderSpec,
-    ACheckTreeSpec
+    ACheckTreeSpec,
+    AAnimatedColorPickerSpec,
+    ASelectionControlSpec
 }

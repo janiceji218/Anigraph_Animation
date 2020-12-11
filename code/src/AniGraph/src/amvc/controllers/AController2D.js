@@ -53,8 +53,14 @@ export default class AController2D extends AController{
     //##################//--Critical Graph Ops for Scene Graph Manipulation--\\##################
     //<editor-fold desc="Critical Graph Ops for Scene Graph Manipulation">
     onModelAttachedToNewParent(modelParent){
+        // if(this.getComponent()===this.getComponentAppState('mainComponent')) {
+
+        console.assert(this.getComponent()!==undefined, "Couldnt find component for controller");
         const newParent = this.getComponent()._getMainControllerForModel(modelParent);
+        // this.getConnectedControllerForModel(modelParent);
+        // const newParent = this.getConnectedControllerForModel(modelParent);
         this._attachToNewParent(newParent);
+        // }
     }
 
     _removeFromParent(){

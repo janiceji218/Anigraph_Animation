@@ -2,6 +2,7 @@ import AObject from "../../aobject/AObject";
 import ATimelinerProp from "./timeliner/ATimelinerProp";
 import AKeyframeInterpolation from "./AKeyframeInterpolation";
 import Vector from "../../amath/Vector";
+import AKeyframe from "./AKeyframe";
 export default class AKeyframeTrack extends AObject{
     constructor(args) {
         super(args);
@@ -17,6 +18,7 @@ export default class AKeyframeTrack extends AObject{
         this.sortKeyframes();
         for(let k of this.keyframes){
             this.keyframeDict[k.getUID()]=k;
+            k.tween.initHandleProgress();
         }
     }
     
@@ -34,6 +36,14 @@ export default class AKeyframeTrack extends AObject{
             rval.values.push(k.getTimelinerJSON());
         }
         return rval;
+    }
+
+    calcHandleProgress(){
+        for(let k of this.keyframes){
+            if(k.tween){
+                k.tween.initHandleProgress();
+            }
+        }
     }
 
     getKeyframeByUID(uid){
@@ -63,25 +73,48 @@ export default class AKeyframeTrack extends AObject{
         for(let k=0;k<this.keyframes.length;k++){
             if(k<(this.keyframes.length-1)){
                 this.keyframes[k].nextKey = this.keyframes[k+1];
-                this.keyframes[k].nextKey.prevKey = this.keyframes[k].nextKey;
+                this.keyframes[k+1].prevKey = this.keyframes[k];
+            }else{
+                this.keyframes[k].nextKey = undefined;// TODO is this right? Should we double up on the last keyframe instead?
             }
             if(this.dimensionRanges.length>1){
                 for(let d=0;d<this.dimensionRanges.length;d++){
-                    var newval =this.keyframes[k].value.elements[d];
-                    if(newval<this.dimensionRanges[d][0]){
-                        this.dimensionRanges[d][0]=this.keyframes[k].value.elements[d];
-                    }
-                    if(newval>this.dimensionRanges[d][1]){
-                        this.dimensionRanges[d][1]=this.keyframes[k].value.elements[d];
+                    var newvals= [];
+                    newvals.push(this.keyframes[k].value.elements[d]);
+                    // if(this.keyframes[k].tween){
+                    //     newvals.push(this.keyframes[k].tween.getStartHandleValueAbsolute().elements[d]);
+                    //     newvals.push(this.keyframes[k].tween.getEndHandleValueAbsolute().elements[d]);
+                    // }
+                    for(let newval of newvals) {
+                        if (newval < this.dimensionRanges[d][0]) {
+                            this.dimensionRanges[d][0] = newval;
+                        }
+                        if (newval > this.dimensionRanges[d][1]) {
+                            this.dimensionRanges[d][1] = newval;
+                        }
                     }
                 }
             }else{
-                if(this.keyframes[k].value<this.dimensionRanges[0][0]){
-                    this.dimensionRanges[0][0]=this.keyframes[k].value;
+                var newvals= [];
+                newvals.push(this.keyframes[k].value);
+                // if(this.keyframes[k].tween){
+                //     newvals.push(this.keyframes[k].tween.getStartHandleValueAbsolute());
+                //     newvals.push(this.keyframes[k].tween.getEndHandleValueAbsolute());
+                // }
+                for(let newval of newvals) {
+                    if (newval < this.dimensionRanges[0][0]) {
+                        this.dimensionRanges[0][0] = newval;
+                    }
+                    if (newval > this.dimensionRanges[0][1]) {
+                        this.dimensionRanges[0][1] = newval;
+                    }
                 }
-                if(this.keyframes[k].value>this.dimensionRanges[0][1]){
-                    this.dimensionRanges[0][1]=this.keyframes[k].value;
-                }
+                // if(this.keyframes[k].value<this.dimensionRanges[0][0]){
+                //     this.dimensionRanges[0][0]=this.keyframes[k].value;
+                // }
+                // if(this.keyframes[k].value>this.dimensionRanges[0][1]){
+                //     this.dimensionRanges[0][1]=this.keyframes[k].value;
+                // }
             }
         }
         this.allDimensionsRange =[this.dimensionRanges[0][0], this.dimensionRanges[0][1]];
@@ -127,6 +160,22 @@ export default class AKeyframeTrack extends AObject{
         }
         delete this.keyframeDict[uid];
         this.sortKeyframes();
+    }
+
+    duplicateKeyframeWithUIDAtTime(uid, time, color){
+        var keyToDuplicate = this.getKeyframeByUID(uid);
+        var newKeyframe = new AKeyframe({
+            time: time,
+            value:keyToDuplicate.getValueCopy(),
+            tween: keyToDuplicate.tween,
+            color: color
+        });
+
+        this.keyframes.push(newKeyframe);
+        this.keyframeDict[newKeyframe.getUID()]=newKeyframe;
+        this.sortKeyframes();
+        newKeyframe.tween.startKey = newKeyframe;
+        keyToDuplicate.tween = new (AKeyframe.TweenClass)({startKey: keyToDuplicate});
     }
 
     moveKeyframeWithUID(uid, time){

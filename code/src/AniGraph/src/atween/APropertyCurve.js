@@ -380,11 +380,13 @@ export default class APropertyCurve extends AObject{
     updateCurve(){
         var lineverts = [];
         var ke = this.keyframeElements[0];
-        var kep;
-        var p = ke.keyframeHandle.position;
-        p.leftHandle = p;
-        p.rightHandle = ke.startHandle.position;
-        lineverts.push(p);
+        if(ke) {
+            var kep;
+            var p = ke.keyframeHandle.position;
+            p.leftHandle = p;
+            p.rightHandle = ke.startHandle.position;
+            lineverts.push(p);
+        }
         for(let ki=1;ki<this.track.keyframes.length;ki++){
             ke = this.keyframeElements[ki];
             kep = this.keyframeElements[ki-1];

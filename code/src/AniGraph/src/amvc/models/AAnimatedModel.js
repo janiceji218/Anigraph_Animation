@@ -5,7 +5,10 @@ import Vector from "../../amath/Vector";
 import Vec2, {P2D} from "../../amath/Vec2";
 import Vec3 from "../../amath/Vec3";
 import AKeyframe from "../../acomponent/atimeline/AKeyframe";
+import Matrix3x3 from "../../amath/Matrix3x3";
 export default class AAnimatedModel extends AModel2D{
+    static DEFAULT_TRANSFORM_ANIMATION_TRACKS = ['position', 'scale', 'rotation', 'anchorshift'];
+
     constructor(args) {
         super(args);
         var keyframeTracks = (args && args.keyframeTracks!==undefined)? args.keyframeTracks : undefined;
@@ -23,13 +26,23 @@ export default class AAnimatedModel extends AModel2D{
     get currentDisplayTime(){return this._currentDisplayTime;}
 
     _initEmptyKeyframeTracks(){
+        if(this._keyframeTracks!==undefined){
+            return;
+        }
         this.setKeyframeTracks({});
-        var transformkeys = ['position', 'scale', 'rotation'];
+        var transformkeys = this.constructor.DEFAULT_TRANSFORM_ANIMATION_TRACKS;
         for(let t of transformkeys){
             this.addKeyframeTrack(t);
         }
         // console.log(this.getJSONString());
 
+    }
+
+    afterLoadFromJSON(args) {
+        super.afterLoadFromJSON(args);
+        for(let t in this.getKeyframeTracks()){
+            this.getKeyframeTrack(t).calcHandleProgress();
+        }
     }
 
     /**
@@ -52,7 +65,7 @@ export default class AAnimatedModel extends AModel2D{
     setKeyframeTrack(name, value){
         var kfts = this.getKeyframeTracks();
         if(kfts===undefined){
-            this._initEmptryKeyframeTracks();
+            this._initEmptyKeyframeTracks();
         }
         // kfts.set(name, value);
         kfts[name]=value;
@@ -61,6 +74,37 @@ export default class AAnimatedModel extends AModel2D{
         this.notifyAnimationTrackChanged({
             track: kfts[name]
         });
+    }
+
+    takeAnimationsFrom(other){
+        this.setKeyframeTracks(other.getKeyframeTracks());
+        other._keyframeTracks = undefined;
+        other._initEmptyKeyframeTracks();
+        this.setMatrixAndPosition(other.matrix, other.getPosition());
+        // if(this.getKeyframeTrack('position') && this.getKeyframeTrack('position').keyframes.length>0){
+        //     other.setPosition(new Vec2(0,0));
+        // }
+        // if(this.getKeyframeTrack('scale') && this.getKeyframeTrack('scale').keyframes.length>0){
+        //     other.setScale(new Vec2(1,1));
+        // }
+        // if(this.getKeyframeTrack('rotation') && this.getKeyframeTrack('rotation').keyframes.length>0){
+        //     other.setRotation(0);
+        // }
+        other.setMatrixAndPosition(Matrix3x3.Identity(), new Vec2(0,0));
+        this.notifyListeners({
+            type: 'animationDataChange',
+        })
+        other.notifyListeners({
+            type: 'animationDataChange',
+        })
+    }
+
+    copyAnimationsFrom(other){
+        this.setKeyframeTracks(other.copyKeyframeTracks());
+    }
+
+    copyKeyframeTracks(){
+        return this.getKeyframeTracks();
     }
 
     notifyAnimationTrackChanged(args){
@@ -85,6 +129,10 @@ export default class AAnimatedModel extends AModel2D{
                 case 'rotation':
                     self.setRotation(value);
                     break;
+                case 'anchorshift':
+                    self.setAnchorShift(value);
+                    break;
+
                 default:
                     self.setProperty(key, value);
             }
@@ -152,6 +200,47 @@ export default class AAnimatedModel extends AModel2D{
         }
     }
 
+    setProperty(name, value, update=true){
+        super.setProperty(name, value, update);
+        if(this.isUpdatingTime){
+            return;
+        }
+        function _are_equal(a,b){
+            if(a===b){
+                return true;
+            }
+            if(a instanceof Vector){
+                return a.equalTo(b);
+            }
+            if(a instanceof Vec2 || a instanceof Vec3 || a instanceof P2D){
+                return a.equalTo(b);
+            }
+            return false;
+        }
+        const track = this.getKeyframeTrack(name);
+        if(track && track.keyframes.length>0){
+            var prevkey = track.getPreviousKeyframeForTime(this.currentDisplayTime);
+            if(!prevkey){
+                prevkey = track.keyframes[0];
+            }
+            var propval = this.getProperty(name);
+            if(!_are_equal(propval, prevkey.value)){
+                if(prevkey.time===this.currentDisplayTime){
+                    prevkey.value =propval;
+                }else {
+                    var newkey = new AKeyframe({
+                        time: this.currentDisplayTime,
+                        value: propval
+                    });
+                    newkey.tween = new (AKeyframe.TweenClass)({startKey: newkey});
+                    track.addKeyframe(newkey, true);
+                    track.sortKeyframes();
+                    this.notifyAnimationTrackChanged();
+                }
+            }
+        }
+    }
+
     removeKeyframeTrack(name){
         delete this.getKeyframeTracks()[name];
         this.notifyAnimationTrackChanged();
@@ -169,9 +258,9 @@ export default class AAnimatedModel extends AModel2D{
         }
     }
 
-    interpolateProperty(){
-
-    }
+    // interpolateProperty(){
+    //
+    // }
 
 
     // setProperty(name, value, update=true){
@@ -190,7 +279,12 @@ export default class AAnimatedModel extends AModel2D{
 export class AAnimatedModelGroup extends AAnimatedModel{
     constructor(args){
         super(args);
+        var loopTime = (args && args.loopTime!==undefined)? args.loopTime : 10.0;
     }
+
+    /** Get set loopTime */
+    set loopTime(value){this.setProperty('loopTime', value);}
+    get loopTime(){return this.getProperty('loopTime');}
 
     /**
      * Convenience accessor to see if a model is an A2ModelGroup. So, `model.isModelGroup` will be

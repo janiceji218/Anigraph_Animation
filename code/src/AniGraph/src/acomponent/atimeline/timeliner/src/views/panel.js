@@ -65,7 +65,8 @@ function TimelinePanel(data, dispatcher) {
 	var layers = data.get('layers').value;
 
 	this.scrollTo = function(s, y) {
-		scrollTop = s * Math.max(layers.length * LINE_HEIGHT - SCROLL_HEIGHT, 0);
+		// scrollTop = s * Math.max(layers.length * LINE_HEIGHT - SCROLL_HEIGHT, 0);
+		scrollTop = s*(y.getLayerScroll().scrollHeight-y.getLayerScroll().clientHeight);
 		repaint();
 	};
 

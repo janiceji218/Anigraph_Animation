@@ -124,6 +124,15 @@ function LayerView(layer, dispatcher) {
 	}
 
 	dom.appendChild(label);
+
+	var dup_keyframe_button = document.createElement('button');
+	dup_keyframe_button.textContent = '|D';
+	dup_keyframe_button.style.cssText = 'font-size: 12px; padding: 1px; ';
+	dom.appendChild(dup_keyframe_button);
+	dup_keyframe_button.addEventListener('click', function(e) {
+		dispatcher.fire('keyframe.dup', layer, state.get('_value').value);
+	});
+
 	dom.appendChild(keyframe_button);
 
 	if(SHOWVALUENUM) {

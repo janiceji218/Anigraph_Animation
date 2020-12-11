@@ -4,6 +4,7 @@ import AView from "../amvc/views/AView";
 import AModel from "../amvc/models/AModel";
 import AComponent from "./AComponent";
 import AControlledComponent from "./AControlledComponent";
+import AObject from "../aobject/AObject";
 
 export default class AMVCComponent extends AControlledComponent{
     static ModelClassMap = {
@@ -77,9 +78,9 @@ export default class AMVCComponent extends AControlledComponent{
     initAppState(){
         super.initAppState();
         const self = this;
-        this.setAppState('loadNewModel', function(model){
-            self.loadNewModel(model);
-        });
+        // this.setAppState('loadNewModel', function(model){
+        //     self.loadNewModel(model);
+        // });
     }
 
     _getMainControllerForModel(model){
@@ -101,6 +102,8 @@ export default class AMVCComponent extends AControlledComponent{
     loadNewModel(model){
         this.reset();
         this.componentController.getModel().addChild(model);
+        // this.addNewModel(model);
+        this.componentController.getModel()._claimChildren();
         this.model.notifyPropertySet({name:'model', value: model, update:true});
     }
 

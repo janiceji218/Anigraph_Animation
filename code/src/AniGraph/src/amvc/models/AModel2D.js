@@ -518,6 +518,25 @@ export default class AModel2D extends AGeometryModel{
         return newGroup;
     }
 
+    insertParentGroup(){
+        const parent = this.getParent();
+        const newGroup = this.constructor.CreateGroup();
+        const siblingList = parent.getChildrenList();
+        var newsiblingList = [];
+        for(let c=0;c<siblingList.length;c++){
+            if(siblingList[c]!==this) {
+                newsiblingList.push(siblingList[c]);
+            }else{
+                newsiblingList.push(newGroup);
+            }
+        }
+        parent.addChild(newGroup);
+        this.reparent(newGroup);
+        newGroup.recenterAnchorInSubtree();
+        parent.reorderChildren(newsiblingList);
+        return newGroup;
+    }
+
     /**
      * Ungroup children is *almost* an inverse of groupChildren. More specifically,
      * if you call `this.groupChildren().ungroupChildren()`, then you should end up

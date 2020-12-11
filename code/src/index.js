@@ -12,21 +12,38 @@ import {
     AKeyframe,
     ATweenComponent,
     ATimelineComponent,
-    AAnimatedModel
+    AAnimatedModel,
+    ASliderSpec
 } from "./AniGraph"
 AKeyframe.TweenClass=ABezierInterpolator;
-
-
 import CustomEditorComponent from "./classes/components/CustomEditorComponent";
 import CustomViewsComponent from "./classes/components/CustomViewsComponent";
 import AModelControlPanel from "./classes/components/AModelControlPanel";
 import AAnimateMainToolPanel from "./classes/components/AAnimateMainToolPanel";
+import AObject from "./AniGraph/src/aobject/AObject";
+
+
+AObject.MapClasses({
+    A2Model: AAnimatedModel,
+    A2ModelGroup: AAnimatedModelGroup
+})
 
 export default function RunAniGraph() {
     const appState = new AMVCAppState({
         model: new AAnimatedModelGroup({name:'rootModel'}),
         newModelClass: AAnimatedModel,
-        GUISpec: new AGUISpec()
+        GUISpec: new AGUISpec({
+            appGUI: [
+                new ASliderSpec({
+                    name: 'TweenZoom',
+                    minVal: 0.1,
+                    maxVal: 1.2,
+                    defaultValue: 0.5
+                })
+            ]
+        }),
+        autoGroupIsOn: true,
+        loopTime: 10.0
     });
 
     const app = (

@@ -6,22 +6,6 @@ import Vector from "../amath/Vector";
 
 export default class ATweenView extends AView2D{
     get currentTime(){return this.getComponentAppState('currentTime');}
-
-    getAxesVerts(args){
-        const vertical_margin = (args && args.vertical_margin!==undefined)? args.vertical_margin: 0.25;
-        const horizontal_margin = (args && args.horizontal_margin!==undefined)? args.horizontal_margin: 0.05;
-        const context = this.getGraphicsContext();
-        const cwidth = context.two.width;
-        const cheight = context.two.height;
-        const hmargin = horizontal_margin*cwidth;
-        const vmargin = vertical_margin*cheight;
-        return [
-            P2D(hmargin, vmargin),
-            P2D(hmargin, cheight-vmargin),
-            P2D(cwidth-hmargin, cheight-vmargin)
-        ];
-    }
-
     release(){
         super.release();
     }

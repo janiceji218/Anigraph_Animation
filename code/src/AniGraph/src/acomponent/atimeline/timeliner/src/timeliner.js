@@ -110,6 +110,10 @@ export default class Timeliner extends AObject{
 		this.host.onKeyframeRemoved(layer._name, keyframe);
 	}
 
+	onDuplicateKeyframeAtTime(layer, keyframe, time){
+		this.host.onDuplicateKeyframeAtTime(layer._name, keyframe, time);
+	}
+
 	onTweenChange(layer, keyframe){
 		this.host.onKeyframeTweenChange(layer._name, keyframe);
 	}
@@ -308,7 +312,7 @@ export default class Timeliner extends AObject{
 		this.updateState();
 	}
 
-	loadKeyframeTracksFromModel(model){
+	loadKeyframeTracksFromModel(model, loopTime){
 		var kfts = model? model.getKeyframeTracks():undefined;
 		if(kfts===undefined || kfts.size===0){
 			this.loadLayers([]);
@@ -319,7 +323,25 @@ export default class Timeliner extends AObject{
 		for(let track of Object.values(kfts)){
 			layerjsons.push(track.getTimelinerJSON());
 		}
+		// var totalTime = model.loopTime? model.loopTime : undefined;
+		// if(totalTime!==undefined){
+		// 	this.data.data.ui.totalTime = totalTime;
+		// }else{
+		// 	model.loopTime=this.data.data.ui.totalTime;
+		// }
+		this.data.data.ui.totalTime = loopTime;
 		this.loadLayers(layerjsons, model.name);
+	}
+
+	setLoopTime(time){
+		// "ui": {
+		// 	"currentTime": 6.8,
+		// 		"totalTime": 20,
+		// 		"scrollTime": 0,
+		// 		"timeScale": 60
+		// },
+		this.data.data.ui.totalTime = time;
+		this.updateState();
 	}
 
 	loadLayers(layers, title){
@@ -335,9 +357,6 @@ export default class Timeliner extends AObject{
 		this.undo_manager.clear();
 		this.undo_manager.save(new UndoState(this.data, 'Loaded'), true);
 		this.updateState();
-
-
-
 	}
 
 	updateState() {
@@ -714,6 +733,20 @@ export default class Timeliner extends AObject{
 
 		});
 
+		dispatcher.on('keyframe.dup', function(layer, value) {
+			var t = data.get('ui:currentTime').value;
+			var v = utils.findTimeinLayer(layer, t);
+			if (typeof(v) === 'number') {
+				self.onDuplicateKeyframeAtTime(layer, layer.values[v-1],t);
+			} else {
+				self.onDuplicateKeyframeAtTime(layer, layer.values[v.index],t);
+			}
+
+			self.repaintAll();
+
+		});
+
+
 		dispatcher.on('keyframe.previous', function(layer, value) {
 			// var index = layers.indexOf(layer);
 			var t = data.get('ui:currentTime').value;
@@ -744,7 +777,7 @@ export default class Timeliner extends AObject{
 			var v = utils.findTimeinLayer(layer, t);
 			if (typeof(v) === 'number') {
 				// this means that it was not on a existing keyframe. It should add a new keyframe, then, spliced at index v
-				if(v.index<layer.values.length){
+				if(v<layer.values.length){
 					self.setCurrentTime(layer.values[v].time);
 				}
 
@@ -1071,7 +1104,7 @@ export default class Timeliner extends AObject{
 			switch (type) {
 				case 'scrollto':
 					layer_panel.scrollTo(scrollTo);
-					timeline.scrollTo(scrollTo);
+					timeline.scrollTo(scrollTo, layer_panel);
 					break;
 				//		case 'pageup':
 				// 			scrollTop -= pageOffset;
