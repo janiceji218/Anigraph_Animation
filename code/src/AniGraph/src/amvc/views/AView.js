@@ -58,13 +58,17 @@ export default class AView extends AObjectNode{
         }
     }
 
-    releaseGraphics(args){
+    clearGraphicsElements(){
         if(this.getGraphics()) {
             for (let g of this.getGraphics()) {
-                g.release(args);
+                g.release();
             }
             this.setGraphics([]);
         }
+    }
+
+    releaseGraphics(args){
+        this.clearGraphicsElements();
     }
 
     release(args){

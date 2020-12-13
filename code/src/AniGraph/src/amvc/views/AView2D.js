@@ -82,6 +82,7 @@ export default class AView2D extends AView{
     }
 
     initGraphics(){
+        var model = this.getModel();
         super.initGraphics();
         if(this.getGroup()===undefined) {
             const context = this.getGraphicsContext();

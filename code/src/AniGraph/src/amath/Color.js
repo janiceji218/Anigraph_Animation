@@ -3,6 +3,14 @@ import Vector from "./Vector";
 import {hslToRgb} from "tinycolor2"
 
 export default class Color extends Vector{
+    static Random(randomAlpha=false){
+        if(randomAlpha) {
+            return new Color(Math.random(), Math.random(), Math.random(), Math.Random());
+        }else{
+            return new Color(Math.random(), Math.random(), Math.random(), 1);
+        }
+    }
+
     constructor(r,g,b,a=1){
         if(r===undefined){
             super([0,0,0,1]);

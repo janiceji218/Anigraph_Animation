@@ -8,6 +8,7 @@ var toFixed = function(v) {
 
 export default class Matrix3x3 {
 
+    static MATRIX_PROPERTY_NAMES=['position', 'rotation', 'scale', 'anchorshift'];
     /**
      * A row-major 3x3 Matrix class for doing 2D graphics with homogeneous coordinates
      * @param m00

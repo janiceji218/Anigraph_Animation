@@ -7,6 +7,7 @@ export default class ASVGElement extends AWebElement{
         this._hidden = null;
         this._matrix = Matrix3x3.Identity();
         this.parentGroup = null;
+        this.view = (args && args.view!==undefined)? args.view : undefined;
         if(this.getTwoJSObject()!==undefined){
             this.twoJSObject._matrix.manual = true;
         }

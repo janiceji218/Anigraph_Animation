@@ -19,6 +19,15 @@ export default class AAnimatedModel extends AModel2D{
             this._initEmptyKeyframeTracks();
         }
         this.currentDisplayTime=0;
+        this.resetObjectMatrixCache();
+    }
+
+    /** Get set objectMatrixCache */
+    set objectMatrixCache(value){this._tempState['objectMatrixCache'] = value;}
+    get objectMatrixCache(){return this._tempState['objectMatrixCache'];}
+    resetObjectMatrixCache(){
+        this.objectMatrixCache=new Map();
+        // this.objectMatrixCache.set(this.currentDisplayTime, this.matrix);
     }
 
     /** Get set currentDisplayTime */
@@ -151,6 +160,72 @@ export default class AAnimatedModel extends AModel2D{
         this.isUpdatingTime = false;
     }
 
+    getModelPropertyAtTime(key, t){
+        var track = this.getKeyframeTrack(key);
+        if(track!==undefined){
+            var prevkey = track.getPreviousKeyframeForTime(t);
+            if(prevkey) {
+                return prevkey.getValueForTime(t);
+            }else{
+                if(track.keyframes.length>0){
+                    return track.keyframes[0].value;
+                }else{
+                    return this.getProperty(key);
+                }
+            }
+        }else{
+            return this.getProperty(key);
+        }
+    }
+
+    getObjectToWorldMatrixAtTime(t){
+        if(this.getParent()){
+            return this.getParent().getObjectToWorldMatrixAtTime(t).times(this.getMatrixAtTime(t));
+            // return this.getParentSpaceMatrix().times(this.matrix);
+        }else{
+            return this.getMatrixAtTime(t);
+            // this.objectMatrixCache.set(t, rval);
+            // return rval;
+        }
+    }
+
+
+    getActiveKeyframeTrackNames(){
+        var rval = [];
+        for(t of this.getKeyframeTracks()){
+            if(t.nKeyframes>0){
+                rval.push(t.name);
+            }
+        }
+        return rval;
+    }
+
+    getMatrixAtTime(t){
+        if(!this.objectMatrixCache){
+            this.resetObjectMatrixCache();
+        }
+        if(this.objectMatrixCache.has(t)){
+            return this.objectMatrixCache.get(t);
+        }
+
+        var fromPropsArgs = {};
+        for(let propname of Matrix3x3.MATRIX_PROPERTY_NAMES){
+            fromPropsArgs[propname]=this.getModelPropertyAtTime(propname, t);
+        }
+        var rval = Matrix3x3.FromProperties(fromPropsArgs);
+        this.objectMatrixCache.set(t, rval);
+        return rval;
+    }
+
+    getVerticesAtTime(t) {
+        if(t===undefined){
+            return this.getVertices();
+        }else {
+            return this.objectVertices ? this.getObjectToWorldMatrixAtTime(t).applyToPoints(this.objectVertices) : undefined;
+        }
+    }
+
+
     setSubtreeCurrentAnimationTime(t){
         this.updateCurrentAnimationTime(t);
         this.mapOverChildren(c=>{
@@ -164,6 +239,7 @@ export default class AAnimatedModel extends AModel2D{
         if(this.isUpdatingTime){
             return;
         }
+        this.resetObjectMatrixCache();
         function _are_equal(a,b){
             if(a===b){
                 return true;
@@ -205,6 +281,7 @@ export default class AAnimatedModel extends AModel2D{
         if(this.isUpdatingTime){
             return;
         }
+        // this.resetObjectMatrixCache();
         function _are_equal(a,b){
             if(a===b){
                 return true;

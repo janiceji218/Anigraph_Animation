@@ -16,7 +16,7 @@ export default class AGUIElementSpec extends AObject{
         this.canAnimate = args && args.canAnimate? args.canAnimate: undefined;
 
         this.type=args && args.type? args.type : undefined;
-        this.defaultValue = args && args.defaultValue? args.defaultValue : undefined;
+        this.defaultValue = args && (args.defaultValue!==undefined)? args.defaultValue : undefined;
 
     }
 }
