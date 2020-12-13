@@ -17,6 +17,13 @@ export default class ATimelineComponent extends AComponent{
     set currentTime(value){this.setAppState('currentTime', value);}
     get currentTime(){return this.getAppState('currentTime');}
 
+    /** Get set playSpeed */
+    set playSpeed(value){
+        this._playSpeed = value;
+        this.timeline.setPlaySpeed(this.playSpeed);
+    }
+    get playSpeed(){return this._playSpeed;}
+
     /** Get set sequenceDuration */
     // set sequenceDuration(value){this._sequenceDuration = value;}
     // get sequenceDuration(){return this._sequenceDuration;}
@@ -28,6 +35,7 @@ export default class ATimelineComponent extends AComponent{
     constructor(args) {
         super(args);
         this.currentTime=0;
+        this._playSpeed = (args && args.playSpeed!==undefined)? args.playSpeed : 1;
     }
 
     _onModelSelectionChange(selectedModel){
@@ -126,6 +134,12 @@ export default class ATimelineComponent extends AComponent{
             self.setState({selectedModel: selectedModel});
             self._onModelSelectionChange(selectedModel);
         });
+
+        this.setAppState('PlaySpeed', this.playSpeed);
+        this.addAppStateListener('PlaySpeed', function(playSpeed){
+            self.playSpeed=playSpeed;
+        })
+
         this.timeline = new Timeliner({host:this});
         this.pushChangesToTimeline();
         this.timeline.snapToBottom();
