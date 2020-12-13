@@ -55,7 +55,7 @@ export default class AView2D extends AView{
         // return AAnimatedColorPickerSpec.VecToColorString(this.getGUIVar(name));
         var c = this.getGUIVar(name);
         if(c){
-            return c.toRGBAString();
+            return new Color(c.elements).toRGBAString();
         }
     }
 

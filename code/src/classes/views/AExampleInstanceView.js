@@ -15,6 +15,10 @@ import Vec2 from "../../AniGraph/src/amath/Vec2";
  * with our original.
  */
 export default class AExampleInstanceView extends AInstancerView2D{
+
+    // You can switch this if you want your instances to go in front or behind your main render elements.
+    static InstancesBehindMainElements = true;
+
     /**
      * We provide three controls: two for translating our instance, and one for shifting it in time (given in seconds).
      */
@@ -55,9 +59,8 @@ export default class AExampleInstanceView extends AInstancerView2D{
         })
     }
 
-    initGeometry() {
-        super.initGeometry();
-
+    initInstanceGeometry() {
+        super.initInstanceGeometry();
         // Let's add a new instances.
         var instanceA = this.addNewInstance();
 

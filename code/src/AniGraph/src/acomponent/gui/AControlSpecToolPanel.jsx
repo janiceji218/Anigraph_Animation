@@ -440,7 +440,7 @@ export default class AControlSpecToolPanel extends AToolPanelComponent{
         }
 
         return (
-            <div style={{overflowY: 'scroll'}}>
+            <div style={{overflowY: 'scroll', height: "400px"}}>
                 <div>
                     <h4> App Controls:</h4>
                     {appControlRenders}

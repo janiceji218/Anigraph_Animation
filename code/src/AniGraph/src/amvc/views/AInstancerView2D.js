@@ -14,6 +14,12 @@ import ASVGSubtreeInstanceElement from "../../aweb/svg/ASVGSubtreeInstanceElemen
 
 export default class AInstancerView2D extends AView2D{
     static GUISpecs = [];
+    static InstancesBehindMainElements = true;
+
+    constructor(args){
+        super(args);
+        this.instancesGoBehind = (args && args.instancesGoBehind!==undefined)? args.instancesGoBehind : this.constructor.InstancesBehindMainElements;
+    }
 
     addNewInstance(args){
         var passArgs = Object.assign({
@@ -53,8 +59,27 @@ export default class AInstancerView2D extends AView2D{
 
     initGeometry() {
         // We will add our shadow first so it goes in the back
-        this.instances = [];
+        var otherChildren;
+        if(this.instancesGoBehind){
+            otherChildren = this.getGroup().getChildrenList();
+            for(let c of otherChildren){
+                c.hide();
+            }
+        }
+        this.initInstanceGeometry();
+        var otherChildren;
+        if(this.instancesGoBehind){
+            for(let c of otherChildren){
+                c.show();
+            }
+        }
         super.initGeometry();
+    }
+
+    initInstanceGeometry(){
+        if(this.instances===undefined){
+            this.instances = [];
+        }
     }
 
     resetGraphics(){
@@ -62,6 +87,7 @@ export default class AInstancerView2D extends AView2D{
         //     i.release();
         // }
         super.clearGraphicsElements();
+        this.instances = [];
         this.initGeometry();
     }
 

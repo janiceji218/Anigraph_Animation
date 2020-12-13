@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { saveAs } from 'file-saver';
 import Vec2 from "../amath/Vec2";
 import Vec3 from "../amath/Vec3";
+import Color from "../amath/Color";
 import Vector from "../amath/Vector";
 import Matrix3x3 from "../amath/Matrix3x3";
 
@@ -228,3 +229,8 @@ export default class AObject{
 }
 
 AObject.RegisterClass(AObject);
+
+AObject.RegisterClass(Vec2);
+AObject.RegisterClass(Vec3);
+AObject.RegisterClass(Color);
+AObject.RegisterClass(Vector);
