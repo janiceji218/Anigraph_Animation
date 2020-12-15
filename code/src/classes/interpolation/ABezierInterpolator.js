@@ -11,8 +11,8 @@ export default class ABezierInterpolator extends AKeyframeInterpolation {
 
     getValueAtTime(time) {
         //Switch which line is commented to use your interpolation method instead
-        return this.getValueAtTimeLinear(time);
-        // return this.getValueAtTimeBezier(time);
+        // return this.getValueAtTimeLinear(time);
+        return this.getValueAtTimeBezier(time);
     }
 
     getControlPointArrays(){
@@ -92,7 +92,11 @@ export default class ABezierInterpolator extends AKeyframeInterpolation {
      * @constructor
      */
     static GetSplineValueForAlpha(alpha, p0, p1, p2, p3){
-        // Your code here
+        var a = ((p0*-1)+(p1*3)+(p2*-3)+p3)*alpha*alpha*alpha;
+        var b =((p0*3)+(p1*-6)+(p2*3))*alpha*alpha;
+        var c =((p0*-3)+(p1*3))*alpha;
+        var d = p0;
+        return a+b+c+d;
     }
 
     /**
@@ -107,7 +111,8 @@ export default class ABezierInterpolator extends AKeyframeInterpolation {
      * @constructor
      */
     static GetSplineYAtX(x, xy0,xy1,xy2,xy3){
-        // Your code here
+        var alpha = ABezierInterpolator.GetSplineAlphaForValue(x, xy0[0], xy1[0],xy2[0], xy3[0]);
+        return ABezierInterpolator.GetSplineValueForAlpha(alpha, xy0[1], xy1[1],xy2[1], xy3[1]);
     }
 
     /**
@@ -122,7 +127,26 @@ export default class ABezierInterpolator extends AKeyframeInterpolation {
      * @constructor
      */
     static GetSplineAlphaForValue(value, p0,p1,p2,p3){
-        // Your code here
+        var timerange = [p0,p3];
+        var searchbounds = [0,1];
+        const threshold = 0.001;
+        var lastGuess = 0;
+        var lastTime = timerange[0]
+        var ntries = 0;
+        while(Math.abs(lastTime-value)>threshold){
+            if(lastTime<value){
+                searchbounds = [lastGuess,searchbounds[1]];
+            }else{
+                searchbounds = [searchbounds[0], lastGuess];
+            }
+            lastGuess = (searchbounds[0]+searchbounds[1])*0.5;
+            lastTime = ABezierInterpolator.GetSplineValueForAlpha(lastGuess, p0, p1, p2, p3);
+            ntries = ntries+1;
+            if(ntries>100000){
+                throw new Error("Binary search doesn't seem to be halting...");
+            }
+        }
+        return lastGuess;
     }
 
     //</editor-fold>

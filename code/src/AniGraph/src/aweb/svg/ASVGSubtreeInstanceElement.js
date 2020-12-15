@@ -33,31 +33,23 @@ export default class ASVGSubtreeInstanceElement extends ASVGGroup{
         this.add(e);
     }
 
+    /**
+     * Returns false if the stucture of the subtree that this instance was built based on has changed
+     * @param t
+     * @returns {boolean}
+     */
     updateInstanceElements(t){
         var modelDescendants = this.view.getModel().getDescendantList();
         if(modelDescendants.length!==this.elements.length){
             this.resetInstanceElements();
         }
-
-        var self = this;
-
         for(let m=0;m<modelDescendants.length;m++){
             if(this.elements[m].model.getUID()===modelDescendants[m].getUID()){
                 this.view.updateInstanceSubElement(this, this.elements[m], t)
             }else{
-                // this.resetGraphics();
-                // this.updateViewElements();
                 return false;
-                // this.elements[m].release;
-                // this.elements[m] = this.createShapeElement(modelDescendants[m]);
-                // this.elements[m] = modelDescendants[m];
-                // this.elements[m].setView(this);
-                // this.elements[m].addToGroup(this.getGroup());
-                // this.addGraphic(newshape);
             }
-
         }
-        // super.updateViewElements();
         return true;
     }
 

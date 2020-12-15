@@ -47,6 +47,9 @@ export default class AExampleInstanceView extends AInstancerView2D{
             maxVal: 5,
             step: 0.01,
         }),
+        new AButtonSpec({
+            name: 'ZeroAnimationOffset'
+        })
     ];
 
     initGUISpecVars(){
@@ -115,7 +118,7 @@ export default class AExampleInstanceView extends AInstancerView2D{
 
         // We can set attributes for specific parts and specific instances, too.
         // To change the name of a model, you use the corresponding text input in the graph view
-        if(element.model.name==='RandomColor' && instance.randomExampleDummyVariable==1){
+        if(element.model.name==='RandomColor' && instance.randomExampleDummyVariable==0){
             element.setAttribute('fill', Color.Random().toRGBAString());
         }
     }
