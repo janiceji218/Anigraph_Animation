@@ -194,7 +194,12 @@ export default class AKeyframeInterpolation extends AObject{
                 handle._timeProgress.elements[d]=this._timeToProgress(handle.time.elements[d]+this.endKey.time);
             }
         }else {
-            handle._timeProgress = this._timeToProgress(handle.time+this.endKey.time);
+            if(this.endKey===undefined){
+                handle._timeProgress = this._timeToProgress(handle.time);
+            }else{
+                handle._timeProgress = this._timeToProgress(handle.time+this.endKey.time);
+            }
+
         }
     }
 
