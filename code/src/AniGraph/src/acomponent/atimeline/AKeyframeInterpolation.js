@@ -195,6 +195,7 @@ export default class AKeyframeInterpolation extends AObject{
             }
         }else {
             if(this.endKey===undefined){
+                console.warn("Tween does not have an endpoint. Handle may have unexpected values.")
                 handle._timeProgress = this._timeToProgress(handle.time);
             }else{
                 handle._timeProgress = this._timeToProgress(handle.time+this.endKey.time);
