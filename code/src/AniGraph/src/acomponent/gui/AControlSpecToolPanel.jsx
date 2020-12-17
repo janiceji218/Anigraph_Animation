@@ -2,7 +2,7 @@
  * Copyright (c) 2020. Abe Davis
  */
 import React from "react"
-import {Checkbox, Toggle} from "rsuite";
+import {Checkbox, Input, Toggle} from "rsuite";
 import {Slider} from "rsuite";
 
 import {SketchPicker} from "react-color";
@@ -20,6 +20,7 @@ import Vector from "../../amath/Vector";
 import AAnimatedColorPickerSpec from "./specs/AAnimatedColorPickerSpec";
 import ASelectionControlSpec from "./specs/ASelectionControlSpec";
 import AButtonSpec from "./specs/AButtonSpec";
+import ATextInputSpec from "./specs/ATextInputSpec";
 
 export default class AControlSpecToolPanel extends AToolPanelComponent{
     constructor(props){
@@ -272,12 +273,12 @@ export default class AControlSpecToolPanel extends AToolPanelComponent{
                     if(control instanceof ASelectionControlSpec){
                         return (
                             <ASelectPicker key={'frag' + control.getUID()}
-                                placeholder={control.name}
-                                onChange={(value) => {
-                                    toolpanel.appControlResponse(control, {value: value});
-                                }}
-                                data={toolpanel.state[control.optionsKey]}
-                                value={toolpanel.state[control.key]}
+                                           placeholder={control.name}
+                                           onChange={(value) => {
+                                               toolpanel.appControlResponse(control, {value: value});
+                                           }}
+                                           data={toolpanel.state[control.optionsKey]}
+                                           value={toolpanel.state[control.key]}
                             />
                         );
                     }else {
@@ -295,6 +296,21 @@ export default class AControlSpecToolPanel extends AToolPanelComponent{
                                     </AColorPicker>
                                 </div>
                             );
+                        }else if(control instanceof ATextInputSpec){
+                            return (
+                                <div key={'frag' + control.getUID()}>
+                                    {label}
+                                    <Input
+                                        placeholder={control.label}
+                                        onChange={(value)=> {
+                                            toolpanel.appControlResponse(control, {value: value});
+                                        }}
+                                        key={'textinput'+control.getUID()}
+                                    >
+                                    </Input>
+                                </div>
+                            );
+
                         } else {
                             if (control instanceof AUploaderSpec) {
                                 return (
@@ -353,81 +369,87 @@ export default class AControlSpecToolPanel extends AToolPanelComponent{
                         />
                     </div>
                 );
-            }else{
-                if(control instanceof AButtonSpec){
-                    return (
-                        <div key={'button' + control.getUID()}>
-                            <button
-                                onClick={(args) => {
-                                    toolpanel.modelSelectionControlResponse(control, {value: args});
-                                }}
-                            >
-                                {control.label}
-                            </button>
-                        </div>
-                    )
-                }else {
-                    if (control instanceof ACheckboxSpec) {
-                        return (
-                            <Checkbox
-                                checked={toolpanel.state[control.key]}
-                                onChange={(args) => {
-                                    toolpanel.modelSelectionControlResponse(control, {value: args});
-                                }}
-                                key={'checkbox' + control.getUID()}
-                            >
-                                {label}
-                            </Checkbox>
-                        );
-                    } else {
-                        if (control instanceof ASelectionControlSpec) {
-                            return (
-                                <ASelectPicker key={'frag' + control.getUID()}
-                                               placeholder={control.name}
-                                               onChange={(value) => {
-                                                   toolpanel.modelSelectionControlResponse(control, {value: value});
-                                               }}
-                                               data={toolpanel.getSelectedModel() ? toolpanel._getDropdownDataItems(toolpanel.getSelectedModel().getProperty(control.optionsKey)) : []}
-                                               value={toolpanel.state[control.key]}
-                                />
-                            );
-                        } else {
-                            if (control instanceof AColorPickerSpec) {
-                                return (
-                                    <React.Fragment key={'frag' + control.getUID()}>
-                                        {label}
-                                        <AColorPicker
-                                            value={toolpanel.state[control.key]}
-                                            onChange={(value) => {
-                                                toolpanel.modelSelectionControlResponse(control, {value: `rgba(${value.rgb.r}, ${value.rgb.g}, ${value.rgb.b}, ${value.rgb.a})`});
-                                            }}
-                                            key={'colorpicker' + control.getUID()}
-                                        >
-                                        </AColorPicker>
-                                    </React.Fragment>
-                                );
-                            } else {
-                                if (control instanceof AAnimatedColorPickerSpec) {
-                                    return (
-                                        <React.Fragment key={'frag' + control.getUID()}>
-                                            {label}
-                                            <AColorPicker
-                                                value={toolpanel.state[control.key]}
-                                                onChange={(value) => {
-                                                    toolpanel.modelSelectionControlResponse(control, {value: AAnimatedColorPickerSpec.ColorToVec(value)});
-                                                }}
-                                                key={'colorpicker' + control.getUID()}
-                                            >
-                                            </AColorPicker>
-                                        </React.Fragment>
-                                    );
-                                }
-                            }
-                        }
-                    }
-                }
+            }else if(control instanceof AButtonSpec){
+                return (
+                    <div key={'button' + control.getUID()}>
+                        <button
+                            onClick={(args) => {
+                                toolpanel.modelSelectionControlResponse(control, {value: args});
+                            }}
+                        >
+                            {control.label}
+                        </button>
+                    </div>
+                )
+            }else if (control instanceof ACheckboxSpec) {
+                return (
+                    <Checkbox
+                        checked={toolpanel.state[control.key]}
+                        onChange={(args) => {
+                            toolpanel.modelSelectionControlResponse(control, {value: args});
+                        }}
+                        key={'checkbox' + control.getUID()}
+                    >
+                        {label}
+                    </Checkbox>
+                );
+            } else if (control instanceof ASelectionControlSpec) {
+                return (
+                    <ASelectPicker key={'frag' + control.getUID()}
+                                   placeholder={control.name}
+                                   onChange={(value) => {
+                                       toolpanel.modelSelectionControlResponse(control, {value: value});
+                                   }}
+                                   data={toolpanel.getSelectedModel() ? toolpanel._getDropdownDataItems(toolpanel.getSelectedModel().getProperty(control.optionsKey)) : []}
+                                   value={toolpanel.state[control.key]}
+                    />
+                );
+            } else if (control instanceof AColorPickerSpec) {
+                return (
+                    <React.Fragment key={'frag' + control.getUID()}>
+                        {label}
+                        <AColorPicker
+                            value={toolpanel.state[control.key]}
+                            onChange={(value) => {
+                                toolpanel.modelSelectionControlResponse(control, {value: `rgba(${value.rgb.r}, ${value.rgb.g}, ${value.rgb.b}, ${value.rgb.a})`});
+                            }}
+                            key={'colorpicker' + control.getUID()}
+                        >
+                        </AColorPicker>
+                    </React.Fragment>
+                );
+            } else if (control instanceof AAnimatedColorPickerSpec) {
+                return (
+                    <React.Fragment key={'frag' + control.getUID()}>
+                        {label}
+                        <AColorPicker
+                            value={toolpanel.state[control.key]}
+                            onChange={(value) => {
+                                toolpanel.modelSelectionControlResponse(control, {value: AAnimatedColorPickerSpec.ColorToVec(value)});
+                            }}
+                            key={'colorpicker' + control.getUID()}
+                        >
+                        </AColorPicker>
+                    </React.Fragment>
+                );
+            }else if (control instanceof ATextInputSpec) {
+                return (
+                    <div key={'frag' + control.getUID()}>
+                        {label}
+                        <Input
+                            placeholder={control.label}
+                            onChange={(value)=> {
+                                toolpanel.modelSelectionControlResponse(control, {value: value});
+                            }}
+                            key={'textinput'+control.getUID()}
+                        >
+                        </Input>
+                    </div>
+                );
             }
+
         }
+
         const appControlRenders = [];
         const selectionControlRenders = [];
 
