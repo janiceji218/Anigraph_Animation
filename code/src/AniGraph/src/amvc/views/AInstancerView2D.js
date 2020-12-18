@@ -52,7 +52,6 @@ export default class AInstancerView2D extends AView2D{
         // First we set the vertices..
         var verts = this.getVerticesForInstanceSubElement(instance, element, time);
         element.setVertices(verts);
-
         // Next, we can optionally set attributes...
         // element.setAttributes(elementModel.getAttributes());
     }
@@ -91,7 +90,7 @@ export default class AInstancerView2D extends AView2D{
         this.initGeometry();
     }
 
-    updateViewElements() {
+    updateInstances(){
         for(let i of this.instances) {
             if (!i.updateInstanceElements(this.getModel().currentDisplayTime)) {
                 this.resetGraphics();
@@ -99,6 +98,10 @@ export default class AInstancerView2D extends AView2D{
                 return;
             }
         }
+    }
+
+    updateViewElements() {
+        this.updateInstances();
         super.updateViewElements();
     }
 }

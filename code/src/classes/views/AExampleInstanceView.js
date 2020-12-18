@@ -123,6 +123,11 @@ export default class AExampleInstanceView extends AInstancerView2D{
         }
     }
 
+
+    updateInstances(){
+        super.updateInstances();
+    }
+
     updateViewElements() {
         // First let's calculate a shift matrix to shift our instance by
         // For now it's just a translation
