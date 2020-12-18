@@ -124,6 +124,16 @@ export default class AExampleInstanceView extends AInstancerView2D{
     }
 
 
+    showOnlyInstances(){
+        for(let c of this.getGroup().getChildrenList()){
+            c.hide();
+        }
+        for(let i of this.instances){
+            i.show();
+        }
+    }
+
+
     updateInstances(){
         super.updateInstances();
     }
