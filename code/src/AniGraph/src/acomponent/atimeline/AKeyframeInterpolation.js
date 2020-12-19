@@ -191,7 +191,12 @@ export default class AKeyframeInterpolation extends AObject{
                 handle._timeProgress = this.startKey.value.dup();
             }
             for(let d=0;d<handle.time.elements.length;d++){
-                handle._timeProgress.elements[d]=this._timeToProgress(handle.time.elements[d]+this.endKey.time);
+                if(this.endKey===undefined) {
+                    console.warn("Tween does not have an endpoint. Handle may have unexpected values.")
+                    handle._timeProgress.elements[d] = this._timeToProgress(handle.time.elements[d]);
+                }else {
+                    handle._timeProgress.elements[d] = this._timeToProgress(handle.time.elements[d] + this.endKey.time);
+                }
             }
         }else {
             if(this.endKey===undefined){
