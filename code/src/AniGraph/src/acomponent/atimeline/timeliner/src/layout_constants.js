@@ -22,7 +22,7 @@ var LayoutConstants = {
 	width: 600,
 	height: 200,
 	TIMELINE_SCROLL_HEIGHT: 0,
-	LEFT_PANE_WIDTH: 250,
+	LEFT_PANE_WIDTH: 350,
 	time_scale: DEFAULT_TIME_SCALE, // number of pixels to 1 second
 	default_length: 10, // seconds,
 	TIMESCALE_RANGE_MIN: -1.5,//confusing because min is actually negative power... just left it that way

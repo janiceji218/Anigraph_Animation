@@ -395,10 +395,12 @@ export default class APropertyCurve extends AObject{
             p.rightHandle = ke.startHandle.position;
             lineverts.push(p);
         }
-        this.shape.setAnchors(lineverts);
-        this.shape._automatic = false;
-        this.shape.noFill();
-        this.shape.closed=false;
+        if(this.shape) {
+            this.shape.setAnchors(lineverts);
+            this.shape._automatic = false;
+            this.shape.noFill();
+            this.shape.closed = false;
+        }
     }
 
     update(){
@@ -412,8 +414,10 @@ export default class APropertyCurve extends AObject{
         //     p.endHandle = k.endHandle.position;
         //     lineverts.push(p);
         // }
-        var currentValuePosition = P2D(this.timeToCanvasX(this.view.currentTime), this.valueToCanvasY(this.getCurrentPropertyValue()));
-        this.currentValueMarker.setPosition(currentValuePosition);
+        if(this.currentValueMarker) {
+            var currentValuePosition = P2D(this.timeToCanvasX(this.view.currentTime), this.valueToCanvasY(this.getCurrentPropertyValue()));
+            this.currentValueMarker.setPosition(currentValuePosition);
+        }
     }
 
     canvasXToTime(x){

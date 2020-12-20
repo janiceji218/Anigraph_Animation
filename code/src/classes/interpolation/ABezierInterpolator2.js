@@ -92,27 +92,31 @@ export default class ABezierInterpolator extends AKeyframeInterpolation {
      * @constructor
      */
     static GetSplineValueForAlpha(alpha, p0, p1, p2, p3){
-        var a = ((p0*-1)+(p1*3)+(p2*-3)+p3)*alpha*alpha*alpha;
-        var b =((p0*3)+(p1*-6)+(p2*3))*alpha*alpha;
-        var c =((p0*-3)+(p1*3))*alpha;
-        var d = p0;
-        return a+b+c+d;
+
+            const real_alpha = 1 - alpha
+    const beta = alpha
+    const v = Math.pow(real_alpha, 3) * p0 + 3 * Math.pow(real_alpha, 2) * beta * p1 +
+    3 * real_alpha * Math.pow(beta, 2) * p2 + Math.pow(beta, 3) * p3
+    return v
+
     }
 
-    /**
-     * Given the four control points of a 2D spline (as arrays with two scalars) return the y coordinate of the spline at the provided x coordinate.
-     * In this case, the second and third control points are limited to being in between the first and last control points.
-     * This will ensure that the solution is unique. You will want to use the `GetSplineAlphaForValue` function below in your code here.
-     * @param x the x coordinate
-     * @param xy0 -- first control point ([x, y])
-     * @param xy1 -- second control point ([x, y])
-     * @param xy2 -- third control point ([x, y])
-     * @param xy3 -- fourth control point ([x, y])
-     * @constructor
-     */
+        /**
+         * Given the four control points of a 2D spline (as arrays with two scalars) return the y coordinate of the spline at the provided x coordinate.
+         * In this case, the second and third control points are limited to being in between the first and last control points.
+         * This will ensure that the solution is unique. You will want to use the `GetSplineAlphaForValue` function below in your code here.
+         * @param x the x coordinate
+         * @param xy0 -- first control point ([x, y])
+         * @param xy1 -- second control point ([x, y])
+         * @param xy2 -- third control point ([x, y])
+         * @param xy3 -- fourth control point ([x, y])
+         * @constructor
+         */
     static GetSplineYAtX(x, xy0,xy1,xy2,xy3){
-        var alpha = ABezierInterpolator.GetSplineAlphaForValue(x, xy0[0], xy1[0],xy2[0], xy3[0]);
-        return ABezierInterpolator.GetSplineValueForAlpha(alpha, xy0[1], xy1[1],xy2[1], xy3[1]);
+
+        const alpha_x = ABezierInterpolator.GetSplineAlphaForValue(x, xy0[0], xy1[0], xy2[0], xy3[0])
+        return ABezierInterpolator.GetSplineValueForAlpha(alpha_x, xy0[1], xy1[1], xy2[1], xy3[1])
+
     }
 
     /**
@@ -126,31 +130,30 @@ export default class ABezierInterpolator extends AKeyframeInterpolation {
      * @param p3
      * @constructor
      */
-    static GetSplineAlphaForValue(value, p0,p1,p2,p3){
-        var timerange = [p0,p3];
-        var searchbounds = [0,1];
-        const threshold = 0.001;
-        var lastGuess = 0;
-        var lastTime = timerange[0]
-        var ntries = 0;
-        while(Math.abs(lastTime-value)>threshold){
-            if(lastTime<value){
-                searchbounds = [lastGuess,searchbounds[1]];
-            }else{
-                searchbounds = [searchbounds[0], lastGuess];
-            }
-            lastGuess = (searchbounds[0]+searchbounds[1])*0.5;
-            lastTime = ABezierInterpolator.GetSplineValueForAlpha(lastGuess, p0, p1, p2, p3);
-            ntries = ntries+1;
-            if(ntries>100000){
-                throw new Error("Binary search doesn't seem to be halting...");
-            }
-        }
-        return lastGuess;
-    }
 
-    //</editor-fold>
-    //##################\\--You should implement the functions in the section above--//##################
+static GetSplineAlphaForValue(value, p0, p1, p2, p3){
+const epsilon = 0.001
+let start = 0
+let end = 1
+
+while (true) {
+let mid = (start + end) / 2.000
+let calcValue = ABezierInterpolator.GetSplineValueForAlpha(mid, p0, p1, p2, p3)
+let err = Math.abs(value - calcValue)
+
+if (err <= epsilon) {console.log(mid); return mid }
+else if (calcValue > value) {
+    end = mid
+}
+else if (calcValue < value) {
+start = mid
+}
+}
+
+}
+
+//</editor-fold>
+//##################\\--You should implement the functions in the section above--//##################
 
 
 }

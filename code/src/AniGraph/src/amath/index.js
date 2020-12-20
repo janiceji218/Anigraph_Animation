@@ -5,6 +5,7 @@ import Precision from "./Precision";
 import {VecEqual, MatrixEqual} from "./Testing";
 import Vector from "./Vector";
 import PointList2D from "./PointList2D";
+import Color from "./Color";
 export {
-    Precision, Vector, Vec2, Vec3, Matrix3x3, VecEqual, MatrixEqual, P2D, PointList2D
+    Precision, Vector, Vec2, Vec3, Matrix3x3, VecEqual, MatrixEqual, P2D, PointList2D, Color
 }

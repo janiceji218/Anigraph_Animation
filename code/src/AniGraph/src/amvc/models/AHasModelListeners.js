@@ -102,7 +102,6 @@ export default class AHasModelListeners extends AObjectNode{
     }
 
     notifyDescendants(args){
-
         this.notifyChildren({
             type: 'parentUpdated',
             parent: this,

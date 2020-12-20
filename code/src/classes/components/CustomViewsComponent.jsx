@@ -2,6 +2,8 @@ import {ASVGLabRenderGraphicsComponent} from "../../AniGraph/src/acomponent/apps
 import PathView from "../../AniGraph/src/acomponent/apps/svglab/exampleviews/PathView";
 import AView2D from "../../AniGraph/src/amvc/views/AView2D";
 import AExampleAnimatedView from "../views/AExampleAnimatedView";
+import AExampleInstanceView from "../views/AExampleInstanceView";
+import AAnimateColorView from "../views/AAnimateColorView";
 
 export default class CustomViewsComponent extends ASVGLabRenderGraphicsComponent{
     initViewClasses(){
@@ -9,12 +11,7 @@ export default class CustomViewsComponent extends ASVGLabRenderGraphicsComponent
         this.addViewClass(PathView);
         this.addViewClass(AView2D);
         this.addViewClass(AExampleAnimatedView);
+        this.addViewClass(AExampleInstanceView);
+        this.addViewClass(AAnimateColorView);
     }
 }
-
-
-
-
-
-
-

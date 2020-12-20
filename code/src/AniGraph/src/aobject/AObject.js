@@ -2,10 +2,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { saveAs } from 'file-saver';
 import Vec2 from "../amath/Vec2";
 import Vec3 from "../amath/Vec3";
+import Color from "../amath/Color";
 import Vector from "../amath/Vector";
 import Matrix3x3 from "../amath/Matrix3x3";
 
 export default class AObject{
+    static RESET_UID_ON_LOAD = false;
+
     //Base class, gets uid for reference saving
     constructor(args){
         this._AObjectClass=this.className;
@@ -14,6 +17,11 @@ export default class AObject{
         this._initPrivate(args);
         this._initName(args);
     }
+
+    _resetUID(){
+        this._uid = uuidv4();
+    }
+
 
     _initName(args){
         this.name = (args && args.name) ? args.name : this._AObjectClass;
@@ -194,7 +202,7 @@ export default class AObject{
                             break;
                         default:
                             return v;
-                            // throw new Error(`Did not know what to do with ${v.elements.length} elements`);
+                        // throw new Error(`Did not know what to do with ${v.elements.length} elements`);
                     }
                 }
                 for (key in obj){
@@ -205,6 +213,9 @@ export default class AObject{
             return res(value);
         });
         var rval = Object.assign(new this.AObjectClasses[obj._AObjectClass](),obj );
+        if(AObject.RESET_UID_ON_LOAD){
+            rval._resetUID();
+        }
         rval.initTempState();
         return rval;
     }
@@ -228,3 +239,8 @@ export default class AObject{
 }
 
 AObject.RegisterClass(AObject);
+
+AObject.RegisterClass(Vec2);
+AObject.RegisterClass(Vec3);
+AObject.RegisterClass(Color);
+AObject.RegisterClass(Vector);

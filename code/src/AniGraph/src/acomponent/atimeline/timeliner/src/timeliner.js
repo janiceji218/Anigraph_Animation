@@ -64,6 +64,14 @@ export default class Timeliner extends AObject{
 	set host(value){this.setTimelineHost(value);}
 	get host(){return this._host;}
 
+	getPlaySpeed(){
+		return this.host.playSpeed*0.001;
+	}
+
+	setPlaySpeed(playSpeed){
+		// this.start_play = performance.now() - this.data.get('ui:currentTime').value * this.getPlaySpeed();
+	}
+
 	bindMethods(){
 		this.paint = this.paint.bind(this);
 		this.resize = this.resize.bind(this);
@@ -182,7 +190,7 @@ export default class Timeliner extends AObject{
 
 	startPlaying() {
 		// played_from = timeline.current_frame;
-		this.start_play = performance.now() - this.data.get('ui:currentTime').value * 1000;
+		this.start_play = performance.now() - this.data.get('ui:currentTime').value / this.getPlaySpeed();
 		this.layer_panel.setControlStatus(true);
 		// dispatcher.fire('controls.status', true);
 	}
@@ -201,7 +209,7 @@ export default class Timeliner extends AObject{
 		this.currentTimeStore.value = value;
 
 		if (this.start_play){
-			this.start_play = performance.now() - value * 1000;
+			this.start_play = performance.now() - value / this.getPlaySpeed();
 		}
 		this.onCurrentTimeUpdate(value);
 		this.repaintAll();
@@ -215,7 +223,7 @@ export default class Timeliner extends AObject{
 	paint() {
 		requestAnimationFrame(this.paint);
 		if (this.start_play) {
-			var t = (performance.now() - this.start_play) / 1000;
+			var t = (performance.now() - this.start_play) * this.getPlaySpeed();
 			this.setCurrentTime(t);
 
 

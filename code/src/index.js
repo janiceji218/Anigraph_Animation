@@ -39,6 +39,13 @@ export default function RunAniGraph() {
                     minVal: 0.1,
                     maxVal: 1.2,
                     defaultValue: 0.5
+                }),
+                new ASliderSpec({
+                    name: 'PlaySpeed',
+                    minVal: 0.05,
+                    maxVal: 2.0,
+                    step: 0.05,
+                    defaultValue: 1.0
                 })
             ]
         }),

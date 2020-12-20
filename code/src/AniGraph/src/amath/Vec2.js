@@ -49,14 +49,18 @@ export default class Vec2 extends Vector{
             }else{
                 super(x);
             }
-        }else if(x.elements!==undefined) {
+        }else if(x===null){
+            console.warn("Tried to create null Vec2: setting nulls to zeros, but this is an error!");
+            return super([0, y===null?0:y])
+        } else if(x.elements!==undefined) {
             super(x.elements);
+        }else if(typeof x == 'number' && y===undefined){
+            super([x,x]);
         }else{
             super([x,y]);
         }
-        if(typeof x == 'number' && y===undefined){
-            super([x,x]);
-        }
+        // console.assert(x!==null, "Tried to create null Vec2: setting nulls to zeros");
+        // return super([0, y===null?0:y])
         // console.assert(elements.length===2, "Cannot create Vec2 with length "+elements.length);
     }
 
