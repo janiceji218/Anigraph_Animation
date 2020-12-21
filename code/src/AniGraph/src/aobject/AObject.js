@@ -7,7 +7,7 @@ import Vector from "../amath/Vector";
 import Matrix3x3 from "../amath/Matrix3x3";
 
 export default class AObject{
-    static RESET_UID_ON_LOAD = false;
+    static RESET_UID_ON_LOAD = true;
 
     //Base class, gets uid for reference saving
     constructor(args){

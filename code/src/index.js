@@ -50,7 +50,7 @@ export default function RunAniGraph() {
             ]
         }),
         autoGroupIsOn: true,
-        loopTime: 10.0
+        loopTime: 5.0
     });
 
     const app = (
